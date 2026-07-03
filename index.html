@@ -1,0 +1,769 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanNova — Gestión Exclusiva de Propiedades</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Playfair Display', 'serif'],
+                        body: ['DM Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --bg: #FAF9F6; --bg-alt: #F3ECE3; --card: #FFFFFF;
+            --accent: #9A6A38; --accent-light: #C5A059; --accent-hover: #7E5326; --accent-glow: rgba(154,106,56,0.12);
+            --text: #211F1D; --text-muted: #7A7571; --border: #EAE3D8; --green: #4F772D; --red: #A63A3A;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; }
+        ::-webkit-scrollbar { width:8px; }
+        ::-webkit-scrollbar-track { background:var(--bg-alt); }
+        ::-webkit-scrollbar-thumb { background:#C5BCB2; border-radius:4px; }
+        ::-webkit-scrollbar-thumb:hover { background:var(--accent); }
+
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+        @keyframes scaleIn { from{opacity:0;transform:scale(0.96)} to{opacity:1;transform:scale(1)} }
+        @keyframes slideRight { from{opacity:0;transform:translateX(24px)} to{opacity:1;transform:translateX(0)} }
+        @keyframes heroCrossfade { 0%{opacity:0;transform:scale(1.05)} 4%{opacity:1} 22%{opacity:1;transform:scale(1)} 28%{opacity:0;transform:scale(0.98)} 100%{opacity:0} }
+
+        .hero-slide { position:absolute; inset:0; background-size:cover; background-position:center; animation:heroCrossfade 20s ease-in-out infinite; opacity:0; }
+        .hero-slide:nth-child(1) { animation-delay:0s; }
+        .hero-slide:nth-child(2) { animation-delay:5s; }
+
+        .anim-fade-up { animation:fadeInUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
+        .anim-fade { animation:fadeIn 0.4s ease both; }
+        .anim-scale { animation:scaleIn 0.35s cubic-bezier(0.16,1,0.3,1) both; }
+        .anim-slide { animation:slideRight 0.4s ease both; }
+        .delay-1{animation-delay:.05s} .delay-2{animation-delay:.1s} .delay-3{animation-delay:.15s}
+        .delay-4{animation-delay:.2s} .delay-5{animation-delay:.25s} .delay-6{animation-delay:.3s}
+
+        .gradient-text { background:linear-gradient(135deg,var(--accent),var(--accent-light)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+        .tab-btn { padding:0.75rem 1.75rem; border-radius:9999px; font-weight:600; font-size:0.9rem; cursor:pointer; transition:all 0.3s cubic-bezier(0.16,1,0.3,1); border:1px solid var(--border); background:var(--card); color:var(--text-muted); font-family:'DM Sans',sans-serif; box-shadow:0 2px 6px rgba(0,0,0,0.02); }
+        .tab-btn:hover { color:var(--accent); border-color:var(--accent-light); background:var(--bg); }
+        .tab-btn.active { background:var(--accent); color:white; border-color:var(--accent); box-shadow:0 4px 14px var(--accent-glow); }
+
+        .prop-card { background:var(--card); border-radius:1.25rem; overflow:hidden; box-shadow:0 4px 20px rgba(45,40,35,0.04); transition:all 0.4s cubic-bezier(0.16,1,0.3,1); border:1px solid var(--border); }
+        .prop-card:hover { transform:translateY(-6px); box-shadow:0 12px 36px rgba(45,40,35,0.09); border-color:var(--accent-light); }
+
+        .carousel-container { position:relative; overflow:hidden; aspect-ratio:16/10; background:#ECE6DC; }
+        .carousel-track { display:flex; transition:transform 0.45s cubic-bezier(0.16,1,0.3,1); height:100%; }
+        .carousel-track img { min-width:100%; height:100%; object-fit:cover; }
+        .carousel-btn { position:absolute; top:50%; transform:translateY(-50%); width:38px; height:38px; border-radius:50%; border:none; background:rgba(255,255,255,0.92); color:var(--text); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:0.85rem; transition:all 0.3s; opacity:0; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+        .prop-card:hover .carousel-btn { opacity:1; }
+        .carousel-btn:hover { background:white; transform:scale(1.05); }
+        .carousel-btn.prev { left:12px; } .carousel-btn.next { right:12px; }
+        .carousel-dots { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); display:flex; gap:6px; z-index:5; }
+        .carousel-dot { width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,0.5); transition:all 0.25s; cursor:pointer; border:none; }
+        .carousel-dot.active { background:white; transform:scale(1.4); }
+        .prop-badge { position:absolute; top:14px; left:14px; z-index:5; padding:0.35rem 0.85rem; border-radius:0.5rem; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
+        .badge-fija { background:#2C2825; color:#FAF8F5; } .badge-corta { background:var(--accent); color:white; } .badge-venta { background:var(--red); color:white; }
+
+        .btn-primary { background:var(--accent); color:white; font-weight:600; padding:0.75rem 1.5rem; border-radius:0.75rem; border:none; cursor:pointer; transition:all 0.3s; font-family:'DM Sans',sans-serif; font-size:0.9rem; display:inline-flex; align-items:center; justify-content:center; }
+        .btn-primary:hover { background:var(--accent-hover); transform:translateY(-1px); box-shadow:0 4px 12px var(--accent-glow); }
+        .btn-secondary { background:transparent; color:var(--accent); font-weight:600; padding:0.75rem 1.5rem; border-radius:0.75rem; border:1.5px solid var(--accent); cursor:pointer; transition:all 0.3s; font-family:'DM Sans',sans-serif; font-size:0.9rem; display:inline-flex; align-items:center; justify-content:center; }
+        .btn-secondary:hover { background:var(--accent); color:white; }
+        .btn-sm { padding:0.5rem 1rem; font-size:0.8rem; border-radius:0.5rem; font-weight:600; cursor:pointer; transition:all 0.25s; border:none; font-family:'DM Sans',sans-serif; display:inline-flex; align-items:center; justify-content:center; }
+        .btn-icon { width:40px; height:40px; border-radius:0.75rem; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--border); background:var(--card); color:var(--text-muted); cursor:pointer; transition:all 0.25s; font-size:0.9rem; }
+        .btn-icon:hover { border-color:var(--accent); color:var(--accent); background:var(--bg); }
+        .btn-icon.danger:hover { border-color:var(--red); color:var(--red); background:rgba(166,58,58,0.05); }
+
+        .form-input { background:var(--bg); border:1.5px solid var(--border); color:var(--text); padding:0.75rem 1rem; border-radius:0.75rem; width:100%; transition:all 0.25s; font-family:'DM Sans',sans-serif; font-size:0.9rem; }
+        .form-input:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-glow); background:white; }
+        .form-input::placeholder { color:#A09993; }
+        textarea.form-input { resize:vertical; min-height:80px; }
+        .form-label { display:block; font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:0.35rem; text-transform:uppercase; letter-spacing:0.05em; }
+        .form-select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237A7571' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; padding-right:2.5rem; }
+
+        .modal-overlay { position:fixed; inset:0; background:rgba(28,26,24,0.6); backdrop-filter:blur(8px); z-index:100; display:none; align-items:center; justify-content:center; padding:1.25rem; }
+        .modal-overlay.active { display:flex; }
+        .modal-box { background:var(--card); border-radius:1.5rem; max-width:650px; width:100%; max-height:90vh; overflow-y:auto; animation:scaleIn 0.35s cubic-bezier(0.16,1,0.3,1); box-shadow:0 24px 60px rgba(0,0,0,0.18); border:1px solid var(--border); }
+        .modal-box::-webkit-scrollbar { width:4px; } .modal-box::-webkit-scrollbar-thumb { background:#D6D3D1; border-radius:2px; }
+
+        #toast-container { position:fixed; bottom:1.5rem; right:1.5rem; z-index:110; display:flex; flex-direction:column; gap:0.5rem; }
+        .toast-item { background:var(--card); border:1px solid var(--border); border-radius:0.85rem; padding:0.9rem 1.4rem; font-size:0.88rem; font-weight:500; box-shadow:0 10px 30px rgba(45,40,35,0.08); animation:slideRight 0.35s cubic-bezier(0.16,1,0.3,1); display:flex; align-items:center; gap:0.75rem; max-width:340px; }
+        .toast-item.success { border-left:4px solid var(--green); }
+        .toast-item.error { border-left:4px solid var(--red); }
+        .toast-item.info { border-left:4px solid var(--accent); }
+
+        .fab { position:fixed; bottom:2rem; right:2rem; width:56px; height:56px; border-radius:50%; background:var(--accent); color:white; border:none; cursor:pointer; display:none; align-items:center; justify-content:center; font-size:1.4rem; box-shadow:0 4px 18px var(--accent-glow); transition:all 0.3s cubic-bezier(0.16,1,0.3,1); z-index:40; }
+        .admin-mode .fab { display:flex; }
+        .fab:hover { background:var(--accent-hover); transform:scale(1.1) translateY(-2px); box-shadow:0 8px 24px rgba(154,106,56,0.3); }
+
+        .social-float { position:fixed; left:1.5rem; bottom:2rem; z-index:35; display:flex; flex-direction:column; gap:0.75rem; }
+        .social-float a { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1.1rem; transition:all 0.3s; text-decoration:none; box-shadow:0 2px 10px rgba(0,0,0,0.15); }
+        .social-float a:hover { transform:scale(1.1) translateY(-3px); }
+        .social-float .wa { background:#25D366; }
+        .social-float .tk { background:#000000; }
+        .social-float .ig { background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+
+        .empty-state { text-align:center; padding:5rem 1rem; }
+        .empty-icon { width:80px; height:80px; margin:0 auto 1.5rem; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--bg-alt); color:var(--accent); }
+
+        @media (max-width:768px) { .social-float { left:0.75rem; gap:0.5rem; } .social-float a { width:38px; height:38px; font-size:0.95rem; } .fab { bottom:1.25rem; right:1.25rem; width:50px; height:50px; font-size:1.2rem; } }
+        @media (max-width:480px) { .social-float { display:none; } }
+
+        .admin-only { display:none !important; }
+        .admin-mode .admin-only { display:inline-flex !important; }
+        .admin-mode .admin-only-block { display:block !important; }
+        .publish-status { font-size:0.7rem; color:var(--text-muted); display:flex; align-items:center; gap:0.4rem; }
+        .publish-status.publishing { color:var(--accent); }
+        .publish-status.published { color:var(--green); }
+        .publish-status.error { color:var(--red); }
+    </style>
+</head>
+<body>
+
+<div id="admin-view" style="display:none;">
+    <nav class="sticky top-0 z-50 border-b shadow-sm" style="background:rgba(250,249,246,0.94); backdrop-filter:blur(16px); border-color:var(--border);">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center gap-3 cursor-pointer" id="navTitle">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm" style="background:var(--accent);">
+                        <i class="fa-solid fa-hotel text-white text-base"></i>
+                    </div>
+                    <span class="font-display font-bold text-2xl tracking-tight">Urban<span class="gradient-text">Nova</span></span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="openSettings()" class="btn-icon admin-only" title="Configuración"><i class="fa-solid fa-gear"></i></button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative overflow-hidden" style="height:52vh;min-height:380px;">
+        <div class="hero-slide" style="background-image:url('fotos/edificio/01.jpg');"></div>
+        <div class="hero-slide" style="background-image:url('fotos/edificio/02.jpg');"></div>
+        <div class="absolute inset-0" style="background:linear-gradient(to bottom, rgba(33,31,29,0.65), rgba(33,31,29,0.3) 50%, var(--bg));"></div>
+        <div class="absolute inset-0 flex items-center justify-center text-center px-6">
+            <div class="anim-fade-up max-w-2xl">
+                <p class="text-xs font-bold uppercase tracking-widest mb-3 text-amber-100">Colección de Espacios Premium</p>
+                <h1 class="font-display text-4xl sm:text-6xl font-extrabold text-white mb-4 leading-tight">Tu estadía ideal en <br><span class="gradient-text">el lugar correcto</span></h1>
+                <p class="text-sm sm:text-base max-w-lg mx-auto text-stone-200">Administración de renta fija, alquiler vacacional y venta de propiedades.</p>
+            </div>
+        </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-10 pb-24">
+        <div class="flex flex-wrap items-center justify-center gap-3 mb-10 anim-fade-up delay-1">
+            <button class="tab-btn" data-tab="fija" onclick="switchTab('fija')"><i class="fa-solid fa-calendar-check mr-2"></i>Renta Fija</button>
+            <button class="tab-btn active" data-tab="corta" onclick="switchTab('corta')"><i class="fa-solid fa-moon mr-2"></i>Renta Corta</button>
+            <button class="tab-btn" data-tab="venta" onclick="switchTab('venta')"><i class="fa-solid fa-tag mr-2"></i>Venta</button>
+        </div>
+        <div id="tab-description" class="text-center mb-8 anim-fade">
+            <h2 class="font-display text-3xl font-bold mb-2 text-stone-900" id="tab-title"></h2>
+            <p style="color:var(--text-muted);" class="max-w-xl mx-auto text-sm" id="tab-subtitle"></p>
+        </div>
+        <div id="properties-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        <div id="empty-state" class="empty-state" style="display:none;">
+            <div class="empty-icon"><i class="fa-solid fa-hotel text-3xl"></i></div>
+            <h3 class="font-display text-2xl font-bold mb-2" id="empty-title"></h3>
+            <p style="color:var(--text-muted);" class="mb-5 max-w-sm mx-auto text-sm" id="empty-subtitle"></p>
+            <button onclick="openPropertyForm()" class="btn-primary admin-only"><i class="fa-solid fa-plus mr-2"></i>Añadir Propiedad</button>
+        </div>
+    </main>
+
+    <div class="social-float">
+        <a href="https://wa.me/" target="_blank" class="wa" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="https://tiktok.com/" target="_blank" class="tk" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://instagram.com/" target="_blank" class="ig" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+    </div>
+
+    <button class="fab admin-only" onclick="openPropertyForm()" title="Añadir propiedad"><i class="fa-solid fa-plus"></i></button>
+</div>
+
+<div id="modal-form" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box">
+        <div class="p-5 border-b flex items-center justify-between" style="border-color:var(--border);">
+            <h2 id="form-title" class="font-display text-xl font-bold">Ficha de Propiedad</h2>
+            <button onclick="closeModal('modal-form')" class="btn-icon" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <form id="property-form" class="p-5 space-y-5" onsubmit="handlePropertySubmit(event)">
+            <input type="hidden" id="form-id">
+            <div>
+                <label class="form-label">Tipo de Publicación</label>
+                <div class="flex gap-3">
+                    <label class="flex-1 cursor-pointer">
+                        <input type="radio" name="form-type" value="fija" class="sr-only peer" onchange="onTypeChange()">
+                        <div class="text-center py-3 rounded-lg border-2 font-semibold text-xs tracking-wide uppercase transition-all peer-checked:border-amber-700 peer-checked:bg-amber-50 peer-checked:text-amber-900" style="border-color:var(--border);color:var(--text-muted);">
+                            <i class="fa-solid fa-calendar-check mr-1.5"></i>Fija
+                        </div>
+                    </label>
+                    <label class="flex-1 cursor-pointer">
+                        <input type="radio" name="form-type" value="corta" class="sr-only peer" onchange="onTypeChange()">
+                        <div class="text-center py-3 rounded-lg border-2 font-semibold text-xs tracking-wide uppercase transition-all peer-checked:border-amber-700 peer-checked:bg-amber-50 peer-checked:text-amber-900" style="border-color:var(--border);color:var(--text-muted);">
+                            <i class="fa-solid fa-moon mr-1.5"></i>Corta
+                        </div>
+                    </label>
+                    <label class="flex-1 cursor-pointer">
+                        <input type="radio" name="form-type" value="venta" class="sr-only peer" onchange="onTypeChange()">
+                        <div class="text-center py-3 rounded-lg border-2 font-semibold text-xs tracking-wide uppercase transition-all peer-checked:border-amber-700 peer-checked:bg-amber-50 peer-checked:text-amber-900" style="border-color:var(--border);color:var(--text-muted);">
+                            <i class="fa-solid fa-tag mr-1.5"></i>Venta
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="sm:col-span-2">
+                    <label class="form-label" for="form-name">Nombre / Título</label>
+                    <input type="text" id="form-name" class="form-input" placeholder="Ej: Suite Deluxe" required>
+                </div>
+                <div>
+                    <label class="form-label" for="form-building">Edificio</label>
+                    <input type="text" id="form-building" class="form-input" placeholder="Ej: Torre Diamante">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label class="form-label" for="form-floor">Piso</label><input type="text" id="form-floor" class="form-input" placeholder="Ej: 15"></div>
+                    <div><label class="form-label" for="form-apt">Depto</label><input type="text" id="form-apt" class="form-input" placeholder="Ej: 1502"></div>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div><label class="form-label" for="form-price">Precio</label><input type="text" id="form-price" class="form-input" placeholder="Ej: 120000" required></div>
+                <div><label class="form-label" for="form-currency">Moneda</label><select id="form-currency" class="form-input form-select"><option value="USD">USD</option><option value="ARS">ARS</option><option value="EUR">EUR</option></select></div>
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+                <div><label class="form-label" for="form-beds"><i class="fa-solid fa-bed mr-1"></i>Hab.</label><input type="number" id="form-beds" class="form-input" min="0" value="1"></div>
+                <div><label class="form-label" for="form-baths"><i class="fa-solid fa-bath mr-1"></i>Baños</label><input type="number" id="form-baths" class="form-input" min="0" value="1"></div>
+                <div><label class="form-label" for="form-guests"><i class="fa-solid fa-user-group mr-1"></i>Huéspedes</label><input type="number" id="form-guests" class="form-input" min="1" value="2"></div>
+            </div>
+            <div>
+                <label class="form-label"><i class="fa-solid fa-images mr-1"></i>Imágenes (rutas separadas por coma)</label>
+                <textarea id="form-images" class="form-input" rows="2" placeholder="fotos/depto-6d/01.jpg, fotos/depto-6d/02.jpg"></textarea>
+            </div>
+            <div><label class="form-label" for="form-desc">Descripción</label><textarea id="form-desc" class="form-input" rows="3" placeholder="Descripción detallada..."></textarea></div>
+            <div><label class="form-label" for="form-amenities">Servicios / Amenities (uno por línea)</label><textarea id="form-amenities" class="form-input" rows="2" placeholder="Wifi&#10;Piscina&#10;Estacionamiento"></textarea></div>
+            <div id="corta-fields" style="display:none;border-top:1.5px dashed var(--border);" class="space-y-4 pt-4">
+                <p class="text-sm font-bold tracking-wide text-amber-800"><i class="fa-solid fa-circle-info mr-1"></i> Datos para Huéspedes</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="form-label" for="form-checkin">Check-in</label><input type="text" id="form-checkin" class="form-input" placeholder="15:00"></div>
+                    <div><label class="form-label" for="form-checkout">Check-out</label><input type="text" id="form-checkout" class="form-input" placeholder="11:00"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="form-label" for="form-wifi-name"><i class="fa-solid fa-wifi mr-1"></i>Red WiFi</label><input type="text" id="form-wifi-name" class="form-input" placeholder="Red_Guest"></div>
+                    <div><label class="form-label" for="form-wifi-pw">Contraseña WiFi</label><input type="text" id="form-wifi-pw" class="form-input" placeholder="Clave123"></div>
+                </div>
+                <div><label class="form-label" for="form-rules">Normas</label><textarea id="form-rules" class="form-input" rows="2" placeholder="No fumar&#10;No fiestas"></textarea></div>
+                <div><label class="form-label" for="form-welcome">Mensaje de Bienvenida</label><textarea id="form-welcome" class="form-input" rows="2" placeholder="¡Bienvenido!"></textarea></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="form-label" for="form-phone">Teléfono</label><input type="tel" id="form-phone" class="form-input" placeholder="+593 99 123 4567"></div>
+                    <div><label class="form-label" for="form-email">Email</label><input type="email" id="form-email" class="form-input" placeholder="soporte@urbannova.com"></div>
+                </div>
+                <div><label class="form-label" for="form-notes">Notas adicionales</label><textarea id="form-notes" class="form-input" rows="2" placeholder="Instrucciones extra..."></textarea></div>
+            </div>
+            <div class="flex gap-3 pt-3 border-t" style="border-color:var(--border);">
+                <button type="submit" class="btn-primary flex-1" id="form-submit-btn"><i class="fa-solid fa-save mr-2"></i>Guardar</button>
+                <button type="button" onclick="closeModal('modal-form')" class="btn-secondary">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="modal-detail" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width:700px;">
+        <div id="detail-content"></div>
+    </div>
+</div>
+
+<div id="modal-settings" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width:500px;">
+        <div class="p-5 border-b flex items-center justify-between" style="border-color:var(--border);">
+            <h2 class="font-display text-xl font-bold">Configuración</h2>
+            <button onclick="closeModal('modal-settings')" class="btn-icon" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="p-5 space-y-5">
+            <div><label class="form-label" for="setting-baseurl">URL Base</label><input type="url" id="setting-baseurl" class="form-input" placeholder="https://tusitio.com/index.html"></div>
+            <div><label class="form-label" for="setting-whatsapp">WhatsApp</label><input type="text" id="setting-whatsapp" class="form-input" placeholder="593991234567"></div>
+            <div><label class="form-label" for="setting-tiktok">TikTok</label><input type="text" id="setting-tiktok" class="form-input" placeholder="@urbannova"></div>
+            <div><label class="form-label" for="setting-instagram">Instagram</label><input type="text" id="setting-instagram" class="form-input" placeholder="@urbannova"></div>
+            <div class="admin-only-block" style="display:none;">
+                <div class="border-t pt-4" style="border-color:var(--border);">
+                    <label class="form-label" for="setting-github-token">Token de GitHub <span class="text-amber-700">(admin)</span></label>
+                    <input type="password" id="setting-github-token" class="form-input" placeholder="github_pat_...">
+                    <p class="text-xs text-stone-400 mt-1">Necesario para publicar cambios en GitHub automáticamente.</p>
+                </div>
+            </div>
+            <div class="flex gap-3 pt-3">
+                <button onclick="saveSettings()" class="btn-primary flex-1"><i class="fa-solid fa-check mr-2"></i>Guardar</button>
+                <button onclick="closeModal('modal-settings')" class="btn-secondary">Cancelar</button>
+            </div>
+            <div class="pt-4 border-t" style="border-color:var(--border);">
+                <p class="text-xs font-semibold text-stone-500 mb-2">DATOS</p>
+                <div class="flex gap-2">
+                    <button onclick="exportData()" class="btn-sm flex-1 bg-stone-100 hover:bg-stone-200 text-stone-700"><i class="fa-solid fa-download mr-1"></i>Exportar JSON</button>
+                    <button onclick="document.getElementById('importFile').click()" class="btn-sm flex-1 bg-stone-100 hover:bg-stone-200 text-stone-700"><i class="fa-solid fa-upload mr-1"></i>Importar JSON</button>
+                    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+                </div>
+                <p class="text-xs text-stone-400 mt-1">Exporta tus propiedades para respaldo.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-delete" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width:380px;">
+        <div class="p-6 text-center">
+            <div class="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center bg-red-50"><i class="fa-solid fa-trash-can text-xl" style="color:var(--red);"></i></div>
+            <h2 class="font-display text-lg font-bold mb-2">¿Eliminar Propiedad?</h2>
+            <p class="text-sm mb-6 text-stone-500">Esta acción no se puede deshacer.</p>
+            <div class="flex gap-3 justify-center">
+                <button onclick="confirmDelete()" class="btn-sm flex-1 bg-red-600 hover:bg-red-700 text-white rounded-lg py-3 font-semibold">Eliminar</button>
+                <button onclick="closeModal('modal-delete')" class="btn-sm flex-1 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg py-3 font-semibold">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+// ====== ESTADO ======
+var properties = [];
+var settings = { baseURL:'', whatsapp:'', tiktok:'', instagram:'' };
+var activeTab = 'corta';
+var isAdmin = false;
+var editingId = null;
+var deletingId = null;
+var STORAGE_KEY = 'urbannova_properties';
+var SETTINGS_KEY = 'urbannova_settings';
+var TOKEN_KEY = 'urbannova_github_token';
+var ADMIN_PASSWORD = 'cuecues1234';
+var GITHUB_OWNER = 'vivimoli';
+var GITHUB_REPO = 'Airbnb';
+var GITHUB_BRANCH = 'main';
+var DATA_FILE = 'data.json';
+
+function getGithubToken() { try { return localStorage.getItem(TOKEN_KEY)||''; } catch(e) { return ''; } }
+function setGithubToken(t) { try { if(t) localStorage.setItem(TOKEN_KEY, t); else localStorage.removeItem(TOKEN_KEY); } catch(e) {} }
+
+// ====== DATA LOADING ======
+function loadData() {
+    try { var s = localStorage.getItem(STORAGE_KEY); if (s) { properties = JSON.parse(s); } } catch(e) {}
+    try { var s = localStorage.getItem(SETTINGS_KEY); if (s) { settings = Object.assign({}, settings, JSON.parse(s)); } } catch(e) {}
+    if (properties.length === 0) {
+        fetchDataFromServer();
+    }
+}
+
+function fetchDataFromServer() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', DATA_FILE, true);
+    xhr.onload = function() {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            try {
+                var data = JSON.parse(xhr.responseText);
+                if (data.properties && data.properties.length > 0) {
+                    properties = data.properties;
+                    if (data.settings) settings = Object.assign({}, settings, data.settings);
+                    saveData(); saveSettingsData();
+                    renderDashboard();
+                    return;
+                }
+            } catch(e) {}
+        }
+        loadDemoData();
+    };
+    xhr.onerror = function() { loadDemoData(); };
+    xhr.send();
+}
+
+function loadDemoData() {
+    properties = [
+        {id:genId(),type:'corta',name:'Depto 6D - Avant Plaza',building:'Edificio Avant Plaza',floor:'6',apt:'D',price:'',currency:'USD',beds:2,baths:2,guests:4,images:'fotos/depto-6d/01.jpg, fotos/depto-6d/02.jpg, fotos/depto-6d/03.jpg, fotos/depto-6d/04.jpg, fotos/depto-6d/05.jpg, fotos/depto-6d/06.jpg, fotos/depto-6d/07.jpg, fotos/depto-6d/08.jpg',description:'Departamento en el edificio Avant Plaza, calle Finlandia n3560 y Suecia. Gran ubicaci\u00f3n a pasos del Parque La Carolina, Megamaxi, Supercines, Quicentro. Internet de ultra velocidad, lavadora, secadora, microondas, horno, menaje completo para 4 hu\u00e9spedes.',amenities:'Wifi\nLavadora\nSecadora\nSmart TV\nMicroondas\nJacuzzi\nGimnasio\nSauna\nParqueadero gratis\nSeguridad 24h',checkin:'15:00',checkout:'11:00',wifiName:'AvantPlaza_WiFi',wifiPw:'Bienvenido2024!',rules:'No fumar\nNo mascotas\nNo fiestas\nNo visitas\nSilencio despu\u00e9s de 22:00',welcome:'\u00a1Bienvenido al Departamento 6D! Disfruta de tu estancia.',phone:'',email:'',notes:'Jacuzzi requiere reserva con 48h. Ba\u00f1o turco con 2h. Gym acceso libre 6:00-21:00.'},
+        {id:genId(),type:'corta',name:'Depto 20F - Torre Solari',building:'Torre Solari',floor:'20',apt:'F',price:'',currency:'USD',beds:2,baths:2,guests:4,images:'fotos/depto-20f/01.jpg, fotos/depto-20f/02.jpg, fotos/depto-20f/03.jpg, fotos/depto-20f/04.jpg, fotos/depto-20f/05.jpg, fotos/depto-20f/06.jpg, fotos/depto-20f/07.jpg, fotos/depto-20f/08.jpg, fotos/depto-20f/09.jpg, fotos/depto-20f/10.jpg, fotos/depto-20f/11.jpg, fotos/depto-20f/12.jpg, fotos/depto-20f/13.jpg, fotos/depto-20f/14.jpg',description:'Tercer edificio m\u00e1s alto de Quito, incre\u00edble vista del centro norte. Totalmente equipado, 2 TV, wifi, cocina, lavadora, secadora, generador de luz.',amenities:'Wifi\nLavadora\nSecadora\nSmart TV\nGimnasio\nSala de Cine\nJacuzzi\nSauna\nBBQ\nParqueadero\nSeguridad 24h',checkin:'15:00',checkout:'11:00',wifiName:'TorreSolari_Guest',wifiPw:'Solari2024!',rules:'No fumar\nNo alcohol\nNo mascotas\nNo visitas\nNo reuniones',welcome:'\u00a1Bienvenido al 20F! Disfruta la mejor vista de Quito.',phone:'',email:'',notes:'Jacuzzi y sauna requieren reserva con 48h (lun-vie). Lunes jacuzzi en mantenimiento.'},
+        {id:genId(),type:'corta',name:'Depto Balc\u00f3n - Avant Plaza',building:'Edificio Avant Plaza',floor:'',apt:'',price:'',currency:'USD',beds:2,baths:2,guests:4,images:'fotos/balcon/01.jpg, fotos/balcon/02.jpg, fotos/balcon/03.jpg, fotos/balcon/04.jpg, fotos/balcon/05.jpg, fotos/balcon/06.jpg, fotos/balcon/07.jpg, fotos/balcon/08.jpg, fotos/balcon/09.jpg, fotos/balcon/10.jpg, fotos/balcon/11.jpg, fotos/balcon/12.jpg',description:'Amplio departamento con balc\u00f3n. Dos dormitorios, menaje completo, parqueadero gratis.',amenities:'Wifi\nLavadora\nSecadora\nSmart TV\nNetflix\nMicroondas\nBalc\u00f3n\nParqueadero gratis\nJacuzzi\nGimnasio\nSeguridad 24h',checkin:'13:00',checkout:'11:00',wifiName:'AvantPlaza_WiFi',wifiPw:'Bienvenido2024!',rules:'No fumar\nNo mascotas\nNo fiestas\nNo visitas',welcome:'\u00a1Bienvenido! Disfruta del balc\u00f3n en la mejor zona de Quito.',phone:'',email:'',notes:'Check-in desde 13:00. Parqueadero gratis asignado en recepci\u00f3n. Jacuzzi requiere 48h.'},
+        {id:genId(),type:'corta',name:'Suite 13I - Eye In The Sky',building:'Torre Solari',floor:'13',apt:'I',price:'',currency:'USD',beds:1,baths:1,guests:3,images:'fotos/suite-13i/01.jpg, fotos/suite-13i/02.jpg, fotos/suite-13i/03.jpg, fotos/suite-13i/04.jpg, fotos/suite-13i/05.jpg, fotos/suite-13i/06.jpg, fotos/suite-13i/07.jpg',description:'Suite tem\u00e1tica con vista. A 3 minutos del Parque La Carolina, Quicentro y Estadio Ol\u00edmpico.',amenities:'Wifi\nSmart TV\nGimnasio\nJacuzzi\nSauna\nSala de Juegos\nBBQ\nCoworking\nPet friendly',checkin:'15:00',checkout:'11:00',wifiName:'Solari13I_Guest',wifiPw:'SkyView2024!',rules:'No fiestas\nNo fumar\nNo vapear\nM\u00e1ximo 3 personas\nSe admite 1 mascota',welcome:'\u00a1Bienvenido a Eye In The Sky!',phone:'',email:'',notes:'No tiene parqueadero propio. Se puede reservar uno con 48h por costo adicional.'},
+        {id:genId(),type:'corta',name:'Departamento Tonsupa',building:'Edificio Residencial Tonsupa',floor:'',apt:'',price:'',currency:'USD',beds:2,baths:1,guests:7,images:'fotos/tonsupa/01.jpg, fotos/tonsupa/02.jpg, fotos/tonsupa/03.jpg, fotos/tonsupa/04.jpg, fotos/tonsupa/05.jpg, fotos/tonsupa/06.jpg, fotos/tonsupa/07.jpg',description:'A media cuadra del mar en Tonsupa. 2 dormitorios, piscina, wifi. Ideal para familias.',amenities:'Wifi\nPiscina\nAgua caliente\nA media cuadra del mar',checkin:'14:00',checkout:'11:00',wifiName:'Tonsupa_Beach',wifiPw:'Tonsupa2024!',rules:'No fumar\nNo mascotas\nNo fiestas',welcome:'\u00a1Bienvenido a Tonsupa! Disfruta del sol y la playa.',phone:'',email:'',notes:'A media cuadra del mar. Piscina disponible.'},
+        {id:genId(),type:'fija',name:'Renta Fija Piso 20 - Torre Solari',building:'Torre Solari',floor:'20',apt:'',price:'850',currency:'USD',beds:2,baths:2,guests:4,images:'',description:'Departamento totalmente amoblado y equipado. Contrato m\u00ednimo 1 a\u00f1o. Vista panor\u00e1mica.',amenities:'Amoblado\nGimnasio\nCoworking\nSala de Cine\nJacuzzi\nSauna\n\u00c1reas comunales\nSeguridad 24h',checkin:'',checkout:'',wifiName:'',wifiPw:'',rules:'',welcome:'',phone:'',email:'',notes:'USD 850 mensuales incluye al\u00edcuota. Garant\u00eda: 2 meses.'},
+        {id:genId(),type:'venta',name:'Venta Piso 21 - Torre Solari',building:'Torre Solari',floor:'21',apt:'',price:'160000',currency:'USD',beds:2,baths:3,guests:4,images:'fotos/venta-p21/01.jpg, fotos/venta-p21/02.jpg, fotos/venta-p21/03.jpg, fotos/venta-p21/04.jpg, fotos/venta-p21/05.jpg, fotos/venta-p21/06.jpg, fotos/venta-p21/07.jpg, fotos/venta-p21/08.jpg',description:'75 m2, 2 dormitorios con ba\u00f1o privado, 1 ba\u00f1o social, cocina amplia, parqueadero, bodega.',amenities:'Vista panor\u00e1mica\nParqueadero\nBodega\nCuarto de m\u00e1quinas\nSeguridad 24h',checkin:'',checkout:'',wifiName:'',wifiPw:'',rules:'',welcome:'',phone:'',email:'',notes:'Precio: $160,000. Vista al Parque Metropolitano y nevados.'},
+        {id:genId(),type:'venta',name:'Suite Piso 15 - Torre Solari',building:'Torre Solari',floor:'15',apt:'',price:'118999',currency:'USD',beds:1,baths:2,guests:2,images:'',description:'Suite en piso 15. 50.62 m2, 1 dormitorio, 1 ba\u00f1o completo + medio ba\u00f1o, bodega.',amenities:'Vista a la 6 de Diciembre\nBodega\nCocina integrada\nSeguridad 24h',checkin:'',checkout:'',wifiName:'',wifiPw:'',rules:'',welcome:'',phone:'',email:'',notes:'$118,999 (negociable). No dispone de parqueadero.'},
+    ];
+    saveData();
+    renderDashboard();
+}
+
+function saveData() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(properties)); } catch(e) {} }
+function saveSettingsData() { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch(e) {} }
+function genId() { return 'p_' + Date.now() + '_' + Math.random().toString(36).substr(2,6); }
+function esc(s) { if(!s) return ''; var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function aptNum(s) { if(!s) return ''; var m = s.match(/\d+/); return m ? m[0] : ''; }
+function isBanoPhoto(path) { return /ba[ñn]o/i.test(path); }
+
+// ====== GITHUB PUBLISH ======
+function publishToGitHub() {
+    var token = getGithubToken();
+    if (!token) return;
+    var ps = document.getElementById('publish-status');
+    if (ps) { ps.className = 'publish-status publishing'; ps.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Publicando...'; }
+    var payload = { properties: properties, settings: settings };
+    var jsonStr = JSON.stringify(payload, null, 2);
+    var encoded = btoa(unescape(encodeURIComponent(jsonStr)));
+    var getUrl = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + DATA_FILE + '?ref=' + GITHUB_BRANCH;
+    fetch(getUrl, { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' } })
+        .then(function(r) { return r.status === 404 ? {} : r.json(); })
+        .then(function(existing) {
+            var body = { message: 'Actualizar datos UrbanNova', content: encoded, branch: GITHUB_BRANCH };
+            if (existing.sha) body.sha = existing.sha;
+            return fetch('https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + DATA_FILE, {
+                method: 'PUT',
+                headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github+json' },
+                body: JSON.stringify(body)
+            });
+        })
+        .then(function(r) {
+            if (r.ok) {
+                if (ps) { ps.className = 'publish-status published'; ps.innerHTML = '<i class="fa-solid fa-check-circle"></i> Publicado'; }
+                setTimeout(function() { if(ps) { ps.style.display = 'none'; } }, 4000);
+            } else {
+                if (ps) { ps.className = 'publish-status error'; ps.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Error al publicar'; }
+            }
+        })
+        .catch(function() {
+            if (ps) { ps.className = 'publish-status error'; ps.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Error de conexi\u00f3n'; }
+        });
+}
+
+// ====== ADMIN ======
+var adminClicks = 0; var adminTimer = null;
+
+function checkAdminAuth() {
+    try { if (sessionStorage.getItem('urbannova_admin') === 'true') { isAdmin = true; document.body.classList.add('admin-mode'); } } catch(e) {}
+}
+
+document.getElementById('navTitle').addEventListener('click', function() {
+    if (isAdmin) {
+        document.getElementById('admin-view').querySelector('.publish-status') && (document.getElementById('admin-view').querySelector('.publish-status').style.display = '');
+    }
+    adminClicks++;
+    if (adminClicks === 1) { adminTimer = setTimeout(function() { adminClicks = 0; }, 600); }
+    if (adminClicks >= 3) {
+        adminClicks = 0; clearTimeout(adminTimer);
+        if (isAdmin) {
+            if (confirm('\u00bfCerrar sesi\u00f3n admin?')) { isAdmin = false; try { sessionStorage.removeItem('urbannova_admin'); } catch(e) {} document.body.classList.remove('admin-mode'); renderProperties(); showToast('Sesi\u00f3n cerrada', 'info'); }
+        } else {
+            var pwd = prompt('Contrase\u00f1a de administrador:');
+            if (pwd === ADMIN_PASSWORD) { isAdmin = true; try { sessionStorage.setItem('urbannova_admin', 'true'); } catch(e) {} document.body.classList.add('admin-mode'); renderProperties(); showToast('Modo admin activado', 'success'); }
+            else if (pwd !== null) showToast('Contrase\u00f1a incorrecta', 'error');
+        }
+    }
+});
+
+// ====== TABS ======
+var tabInfo = {
+    fija: { title: 'Renta Fija', subtitle: 'Contratos a mediano y largo plazo.', badge: 'badge-fija', badgeText: 'RENTA FIJA' },
+    corta: { title: 'Renta Corta', subtitle: 'Estad\u00edas por d\u00edas o semanas.', badge: 'badge-corta', badgeText: 'RENTA CORTA' },
+    venta: { title: 'Venta', subtitle: 'Oportunidades inmobiliarias seleccionadas.', badge: 'badge-venta', badgeText: 'EN VENTA' },
+};
+
+function switchTab(t) {
+    activeTab = t;
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.tab === t); });
+    var info = tabInfo[t];
+    document.getElementById('tab-title').textContent = info.title;
+    document.getElementById('tab-subtitle').textContent = info.subtitle;
+    renderProperties();
+}
+
+// ====== RENDER ======
+function renderProperties() {
+    var grid = document.getElementById('properties-grid');
+    var empty = document.getElementById('empty-state');
+    var info = tabInfo[activeTab];
+    var filtered = properties.filter(function(p) { return p.type === activeTab; });
+    if (filtered.length === 0) {
+        grid.innerHTML = ''; empty.style.display = 'block';
+        document.getElementById('empty-title').textContent = 'Sin propiedades en ' + info.title;
+        document.getElementById('empty-subtitle').textContent = 'A\u00f1ada una propiedad para comenzar.';
+        return;
+    }
+    empty.style.display = 'none';
+    grid.innerHTML = filtered.map(function(p, i) {
+        var imgs = (p.images||'').split(',').map(function(u) { return u.trim(); }).filter(Boolean);
+        var coverImgs = imgs.filter(function(u) { return !isBanoPhoto(u); });
+        if (coverImgs.length === 0) coverImgs = imgs;
+        var priceLabel = p.type === 'fija' ? '/mes' : p.type === 'corta' ? '/noche' : '';
+        var currencySymbol = p.currency === 'USD' ? 'US$' : p.currency === 'EUR' ? '\u20ac' : '$';
+        var amenities = (p.amenities||'').split('\n').filter(function(a) { return a.trim(); }).slice(0,4);
+        var hasMore = (p.amenities||'').split('\n').filter(function(a) { return a.trim(); }).length > 4;
+        var defaultImg = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%22500%22%3E%3Crect fill=%22%23EAE3D8%22 width=%22800%22 height=%22500%22/%3E%3Ctext x=%22400%22 y=%22250%22 text-anchor=%22middle%22 fill=%22%239A6A38%22 font-size=%2220%22 font-family=%22sans-serif%22%3ESin foto%3C/text%3E%3C/svg%3E';
+        return '<div class="prop-card anim-fade-up delay-' + Math.min(i+1,6) + '">' +
+            '<div class="carousel-container">' +
+            (coverImgs.length > 0 ? '<div class="carousel-track" data-index="0">' + coverImgs.map(function(u) { return '<img src="' + esc(u) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">'; }).join('') + '</div>' + (coverImgs.length > 1 ? '<button class="carousel-btn prev" onclick="event.stopPropagation();carouselMove(this,\'prev\')"><i class="fa-solid fa-chevron-left"></i></button><button class="carousel-btn next" onclick="event.stopPropagation();carouselMove(this,\'next\')"><i class="fa-solid fa-chevron-right"></i></button><div class="carousel-dots">' + coverImgs.map(function(_,j) { return '<button class="carousel-dot' + (j===0?' active':'') + '" onclick="event.stopPropagation();carouselGo(this,'+j+')"></button>'; }).join('') + '</div>' : '') : '<img src="' + defaultImg + '" alt="" class="w-full h-full object-cover">') +
+            '<span class="prop-badge ' + info.badge + '">' + info.badgeText + '</span></div>' +
+            '<div class="p-5" style="min-height:250px;"><div><div class="flex items-start justify-between gap-2 mb-2">' +
+            '<h3 class="font-display font-bold text-lg text-stone-900 leading-tight flex-1 cursor-pointer hover:text-amber-800" onclick="viewDetail(\'' + p.id + '\')">' + esc(p.name) + '</h3>' +
+            '<div class="flex gap-1 flex-shrink-0 admin-only"><button onclick="editProperty(\'' + p.id + '\')" class="btn-icon" style="width:32px;height:32px;font-size:0.75rem;" title="Editar"><i class="fa-solid fa-pen"></i></button><button onclick="requestDelete(\'' + p.id + '\')" class="btn-icon danger" style="width:32px;height:32px;font-size:0.75rem;" title="Eliminar"><i class="fa-solid fa-trash"></i></button></div></div>' +
+            '<p class="text-xs mb-3 flex items-center gap-1.5" style="color:var(--text-muted);"><i class="fa-solid fa-location-dot" style="color:var(--accent);"></i>' + [p.building, p.floor ? 'Piso '+p.floor : '', aptNum(p.apt) ? 'Depto '+aptNum(p.apt) : ''].filter(Boolean).join(' \u00b7 ') + '</p>' +
+            (p.price ? '<div class="flex items-baseline gap-1 mb-4"><span class="font-display font-bold text-2xl" style="color:var(--accent);">' + currencySymbol + Number(p.price).toLocaleString('es') + '</span><span class="text-xs font-semibold uppercase tracking-wider" style="color:var(--text-muted);">' + priceLabel + '</span></div>' : '') +
+            '<div class="flex gap-4 mb-4 text-xs font-medium text-stone-600">' + (p.beds ? '<span><i class="fa-solid fa-bed mr-1 text-amber-800"></i>' + p.beds + ' Hab.</span>' : '') + (p.baths ? '<span><i class="fa-solid fa-bath mr-1 text-amber-800"></i>' + p.baths + ' Ba\u00f1os</span>' : '') + (p.guests ? '<span><i class="fa-solid fa-user-group mr-1 text-amber-800"></i>' + p.guests + ' Hu\u00e9spedes</span>' : '') + '</div>' +
+            (amenities.length > 0 ? '<div class="flex flex-wrap gap-1 mb-4">' + amenities.map(function(a) { return '<span class="text-[10px] px-2 py-1 rounded bg-stone-100 font-medium text-stone-600">' + esc(a.trim()) + '</span>'; }).join('') + (hasMore ? '<span class="text-[10px] px-2 py-1 rounded bg-amber-50 font-bold text-amber-800">+ M\u00e1s</span>' : '') + '</div>' : '') + '</div>' +
+            '<div class="flex gap-2 pt-3 border-t" style="border-color:var(--border);"><button onclick="viewDetail(\'' + p.id + '\')" class="btn-sm flex-1 bg-stone-100 hover:bg-stone-200 text-stone-800"><i class="fa-solid fa-circle-info mr-1.5"></i>Detalles</button>' +
+            '</div></div></div>';
+    }).join('');
+}
+
+// ====== CAROUSEL ======
+function carouselMove(btn, dir) {
+    var container = btn.closest('.carousel-container');
+    var track = container.querySelector('.carousel-track');
+    var total = track.children.length;
+    var idx = parseInt(track.dataset.index || 0);
+    idx = dir === 'prev' ? (idx - 1 + total) % total : (idx + 1) % total;
+    track.dataset.index = idx;
+    track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+    container.querySelectorAll('.carousel-dot').forEach(function(d, j) { d.classList.toggle('active', j === idx); });
+}
+
+function carouselGo(dot, idx) {
+    var container = dot.closest('.carousel-container');
+    var track = container.querySelector('.carousel-track');
+    track.dataset.index = idx;
+    track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+    container.querySelectorAll('.carousel-dot').forEach(function(d, j) { d.classList.toggle('active', j === idx); });
+}
+
+// ====== DETAIL ======
+var detailCarouselIdx = 0;
+function viewDetail(id) {
+    var p = properties.find(function(pr) { return pr.id === id; });
+    if (!p) return;
+    detailCarouselIdx = 0;
+    var imgs = (p.images||'').split(',').map(function(u) { return u.trim(); }).filter(Boolean);
+    var currencySymbol = p.currency === 'USD' ? 'US$' : p.currency === 'EUR' ? '\u20ac' : '$';
+    var priceLabel = p.type === 'fija' ? '/mes' : p.type === 'corta' ? '/noche' : '';
+    var amenities = (p.amenities||'').split('\n').filter(function(a) { return a.trim(); });
+    var rules = (p.rules||'').split('\n').filter(function(r) { return r.trim(); });
+    var defaultImg = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%22500%22%3E%3Crect fill=%22%23EAE3D8%22 width=%22800%22 height=%22500%22/%3E%3Ctext x=%22400%22 y=%22250%22 text-anchor=%22middle%22 fill=%22%239A6A38%22 font-size=%2220%22 font-family=%22sans-serif%22%3ESin foto%3C/text%3E%3C/svg%3E';
+    var info = tabInfo[p.type];
+    document.getElementById('detail-content').innerHTML =
+        '<div class="relative overflow-hidden aspect-video bg-stone-200">' +
+        '<div class="carousel-track" data-index="0" id="detail-carousel-track" style="height:100%;">' +
+        (imgs.length > 0 ? imgs.map(function(u) { return '<img src="' + esc(u) + '" alt="" class="w-full h-full object-cover" onerror="this.src=\'' + defaultImg + '\'">'; }).join('') : '<img src="' + defaultImg + '" alt="" class="w-full h-full object-cover">') + '</div>' +
+        (imgs.length > 1 ? '<button class="carousel-btn prev" onclick="detailCarouselMove(-1)" style="opacity:1;"><i class="fa-solid fa-chevron-left"></i></button><button class="carousel-btn next" onclick="detailCarouselMove(1)" style="opacity:1;"><i class="fa-solid fa-chevron-right"></i></button>' : '') +
+        '<span class="prop-badge ' + info.badge + '">' + info.badgeText + '</span></div>' +
+        '<div class="p-6 space-y-6"><div><div class="flex items-start justify-between gap-3 mb-1">' +
+        '<h2 class="font-display text-2xl sm:text-3xl font-extrabold text-stone-900">' + esc(p.name) + '</h2>' +
+        '<div class="flex gap-1 flex-shrink-0 admin-only"><button onclick="editProperty(\'' + p.id + '\');closeModal(\'modal-detail\');" class="btn-icon" style="width:34px;height:34px;" title="Editar"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="closeModal(\'modal-detail\');requestDelete(\'' + p.id + '\');" class="btn-icon danger" style="width:34px;height:34px;" title="Eliminar"><i class="fa-solid fa-trash text-xs"></i></button></div></div>' +
+        '<p class="text-sm text-stone-500"><i class="fa-solid fa-location-dot mr-1.5" style="color:var(--accent);"></i>' + [p.building, p.floor ? 'Piso '+p.floor : '', aptNum(p.apt) ? 'Depto '+aptNum(p.apt) : ''].filter(Boolean).join(' \u00b7 ') + '</p></div>' +
+        (p.price ? '<div class="flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl" style="background:var(--bg-alt);"><div class="flex items-baseline gap-1"><span class="font-display font-bold text-3xl text-stone-900">' + currencySymbol + Number(p.price).toLocaleString('es') + '</span><span class="text-xs font-bold uppercase text-stone-500">' + priceLabel + '</span></div><div class="flex gap-4 text-sm font-semibold text-stone-700">' + (p.beds ? '<span><i class="fa-solid fa-bed mr-1 text-amber-800"></i>' + p.beds + ' Hab.</span>' : '') + (p.baths ? '<span><i class="fa-solid fa-bath mr-1 text-amber-800"></i>' + p.baths + ' Ba\u00f1os</span>' : '') + (p.guests ? '<span><i class="fa-solid fa-user-group mr-1 text-amber-800"></i>' + p.guests + ' Hu\u00e9spedes</span>' : '') + '</div></div>' : '') +
+        (p.description ? '<div><h4 class="font-display font-bold text-sm uppercase tracking-wider mb-2 text-stone-400">Descripci\u00f3n</h4><p class="text-sm leading-relaxed text-stone-600">' + esc(p.description) + '</p></div>' : '') +
+        (amenities.length > 0 ? '<div><h4 class="font-display font-bold text-sm uppercase tracking-wider mb-2 text-stone-400">Amenities</h4><div class="flex flex-wrap gap-2">' + amenities.map(function(a) { return '<span class="text-xs px-3 py-1.5 rounded-full font-medium bg-stone-100 text-stone-700 border border-stone-200/50"><i class="fa-solid fa-circle-check mr-1.5 text-emerald-700"></i>' + esc(a.trim()) + '</span>'; }).join('') + '</div></div>' : '') +
+        (p.notes ? '<div class="rounded-xl p-4 bg-amber-50 border border-amber-200/50"><h4 class="font-display font-bold text-sm text-amber-900 mb-1 flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> Notas</h4><p class="text-xs text-amber-800 leading-relaxed">' + esc(p.notes) + '</p></div>' : '') +
+        '</div>';
+    openModal('modal-detail');
+}
+
+function detailCarouselMove(dir) {
+    var track = document.getElementById('detail-carousel-track');
+    if (!track) return;
+    var total = track.children.length;
+    detailCarouselIdx = (detailCarouselIdx + dir + total) % total;
+    track.style.transform = 'translateX(-' + (detailCarouselIdx * 100) + '%)';
+}
+
+// ====== FORM ======
+function openPropertyForm(id) {
+    editingId = id || null;
+    document.getElementById('property-form').reset();
+    document.getElementById('form-id').value = '';
+    if (id) {
+        var p = properties.find(function(pr) { return pr.id === id; });
+        if (!p) return;
+        document.getElementById('form-title').textContent = 'Editar Propiedad';
+        document.getElementById('form-id').value = p.id;
+        document.getElementById('form-name').value = p.name;
+        document.getElementById('form-building').value = p.building||'';
+        document.getElementById('form-floor').value = p.floor||'';
+        document.getElementById('form-apt').value = p.apt||'';
+        document.getElementById('form-price').value = p.price||'';
+        document.getElementById('form-currency').value = p.currency||'USD';
+        document.getElementById('form-beds').value = p.beds||1;
+        document.getElementById('form-baths').value = p.baths||1;
+        document.getElementById('form-guests').value = p.guests||2;
+        document.getElementById('form-images').value = p.images||'';
+        document.getElementById('form-desc').value = p.description||'';
+        document.getElementById('form-amenities').value = p.amenities||'';
+        document.getElementById('form-checkin').value = p.checkin||'';
+        document.getElementById('form-checkout').value = p.checkout||'';
+        document.getElementById('form-wifi-name').value = p.wifiName||'';
+        document.getElementById('form-wifi-pw').value = p.wifiPw||'';
+        document.getElementById('form-rules').value = p.rules||'';
+        document.getElementById('form-welcome').value = p.welcome||'';
+        document.getElementById('form-phone').value = p.phone||'';
+        document.getElementById('form-email').value = p.email||'';
+        document.getElementById('form-notes').value = p.notes||'';
+        var radios = document.querySelectorAll('input[name="form-type"]');
+        radios.forEach(function(r) { r.checked = r.value === p.type; });
+        onTypeChange();
+    } else {
+        document.getElementById('form-title').textContent = 'Nueva Propiedad';
+        var radios = document.querySelectorAll('input[name="form-type"]');
+        radios.forEach(function(r) { r.checked = r.value === activeTab; });
+        onTypeChange();
+    }
+    openModal('modal-form');
+}
+
+function editProperty(id) { openPropertyForm(id); }
+
+function onTypeChange() {
+    var type = document.querySelector('input[name="form-type"]:checked');
+    document.getElementById('corta-fields').style.display = type && type.value === 'corta' ? 'block' : 'none';
+}
+
+function handlePropertySubmit(e) {
+    e.preventDefault();
+    var id = document.getElementById('form-id').value;
+    var type = (document.querySelector('input[name="form-type"]:checked')||{}).value || activeTab;
+    var imagesRaw = document.getElementById('form-images').value;
+    var data = {
+        type: type,
+        name: document.getElementById('form-name').value.trim(),
+        building: document.getElementById('form-building').value.trim(),
+        floor: document.getElementById('form-floor').value.trim(),
+        apt: document.getElementById('form-apt').value.trim(),
+        price: document.getElementById('form-price').value.trim(),
+        currency: document.getElementById('form-currency').value,
+        beds: parseInt(document.getElementById('form-beds').value)||1,
+        baths: parseInt(document.getElementById('form-baths').value)||1,
+        guests: parseInt(document.getElementById('form-guests').value)||2,
+        images: imagesRaw,
+        description: document.getElementById('form-desc').value.trim(),
+        amenities: document.getElementById('form-amenities').value.trim(),
+        checkin: document.getElementById('form-checkin').value.trim(),
+        checkout: document.getElementById('form-checkout').value.trim(),
+        wifiName: document.getElementById('form-wifi-name').value.trim(),
+        wifiPw: document.getElementById('form-wifi-pw').value.trim(),
+        rules: document.getElementById('form-rules').value.trim(),
+        welcome: document.getElementById('form-welcome').value.trim(),
+        phone: document.getElementById('form-phone').value.trim(),
+        email: document.getElementById('form-email').value.trim(),
+        notes: document.getElementById('form-notes').value.trim(),
+    };
+    if (id) {
+        var idx = properties.findIndex(function(p) { return p.id === id; });
+        if (idx !== -1) { properties[idx] = Object.assign({}, properties[idx], data); showToast('Propiedad actualizada', 'success'); }
+    } else {
+        data.id = genId(); properties.push(data); showToast('Propiedad creada', 'success');
+    }
+    saveData(); renderDashboard(); closeModal('modal-form');
+    publishToGitHub();
+}
+
+function renderDashboard() {
+    var info = tabInfo[activeTab];
+    document.getElementById('tab-title').textContent = info.title;
+    document.getElementById('tab-subtitle').textContent = info.subtitle;
+    renderProperties();
+}
+
+// ====== DELETE ======
+function requestDelete(id) { deletingId = id; openModal('modal-delete'); }
+function confirmDelete() {
+    if (!deletingId) return;
+    properties = properties.filter(function(p) { return p.id !== deletingId; });
+    deletingId = null; saveData(); renderDashboard(); closeModal('modal-delete');
+    showToast('Propiedad eliminada', 'info');
+    publishToGitHub();
+}
+
+// ====== SETTINGS ======
+function openSettings() {
+    document.getElementById('setting-baseurl').value = settings.baseURL||'';
+    document.getElementById('setting-whatsapp').value = settings.whatsapp||'';
+    document.getElementById('setting-tiktok').value = settings.tiktok||'';
+    document.getElementById('setting-instagram').value = settings.instagram||'';
+    document.getElementById('setting-github-token').value = getGithubToken();
+    var tokenGroup = document.getElementById('setting-github-token').closest('.admin-only-block');
+    tokenGroup.style.display = isAdmin ? 'block' : 'none';
+    openModal('modal-settings');
+}
+
+function saveSettings() {
+    settings.baseURL = document.getElementById('setting-baseurl').value.trim();
+    settings.whatsapp = document.getElementById('setting-whatsapp').value.trim();
+    settings.tiktok = document.getElementById('setting-tiktok').value.trim();
+    settings.instagram = document.getElementById('setting-instagram').value.trim();
+    var tokenVal = document.getElementById('setting-github-token').value.trim();
+    setGithubToken(tokenVal);
+    saveSettingsData();
+    var waLinks = document.querySelectorAll('a[href*="wa.me"]');
+    waLinks.forEach(function(a) { if (settings.whatsapp) a.href = 'https://wa.me/' + settings.whatsapp.replace(/[^0-9]/g,''); });
+    var tkLinks = document.querySelectorAll('a[href*="tiktok.com"]');
+    tkLinks.forEach(function(a) { if (settings.tiktok) a.href = 'https://tiktok.com/' + settings.tiktok; });
+    var igLinks = document.querySelectorAll('a[href*="instagram.com"]');
+    igLinks.forEach(function(a) { if (settings.instagram) a.href = 'https://instagram.com/' + settings.instagram.replace('@',''); });
+    closeModal('modal-settings');
+    showToast('Configuraci\u00f3n guardada', 'success');
+    if (tokenVal) publishToGitHub();
+}
+
+// ====== EXPORT / IMPORT ======
+function exportData() {
+    var data = JSON.stringify({properties:properties,settings:settings}, null, 2);
+    var blob = new Blob([data], {type:'application/json'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a'); a.href = url; a.download = 'UrbanNova_datos.json'; a.click();
+    URL.revokeObjectURL(url);
+    showToast('Datos exportados', 'success');
+}
+
+function importData(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+        try {
+            var data = JSON.parse(ev.target.result);
+            if (data.properties && Array.isArray(data.properties)) {
+                properties = data.properties;
+                if (data.settings) settings = Object.assign({}, settings, data.settings);
+                saveData(); saveSettingsData();
+                renderProperties();
+                showToast('Datos importados correctamente (' + properties.length + ' propiedades)', 'success');
+                publishToGitHub();
+            } else {
+                showToast('Archivo inv\u00e1lido', 'error');
+            }
+        } catch(err) { showToast('Error al importar: ' + err.message, 'error'); }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+}
+
+// ====== MODALS ======
+function openModal(id) { document.getElementById(id).classList.add('active'); document.body.style.overflow = 'hidden'; }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); document.body.style.overflow = ''; }
+document.querySelectorAll('.modal-overlay').forEach(function(o) { o.addEventListener('click', function(e) { if (e.target === o) { o.classList.remove('active'); document.body.style.overflow = ''; } }); });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { document.querySelectorAll('.modal-overlay.active').forEach(function(m) { m.classList.remove('active'); }); document.body.style.overflow = ''; } });
+
+// ====== TOAST ======
+function showToast(msg, type) {
+    var c = document.getElementById('toast-container');
+    var icons = {success:'<i class="fa-solid fa-circle-check" style="color:var(--green);"></i>',error:'<i class="fa-solid fa-circle-xmark" style="color:var(--red);"></i>',info:'<i class="fa-solid fa-circle-info" style="color:var(--accent);"></i>'};
+    var t = document.createElement('div');
+    t.className = 'toast-item ' + (type||'info');
+    t.innerHTML = (icons[type]||icons.info) + '<span>' + msg + '</span>';
+    c.appendChild(t);
+    setTimeout(function() { t.style.opacity='0'; t.style.transform='translateX(30px)'; t.style.transition='all 0.35s ease'; setTimeout(function() { t.remove(); }, 350); }, 3800);
+}
+
+// ====== INIT ======
+(function() {
+    loadData();
+    checkAdminAuth();
+    document.getElementById('admin-view').style.display = '';
+})();
+</script>
+</body>
+</html>
