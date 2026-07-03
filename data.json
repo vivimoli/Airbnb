@@ -107,7 +107,7 @@
       "building": "Edificio Residencial Tonsupa",
       "floor": "",
       "apt": "",
-      "price": "",
+      "price": "100",
       "currency": "USD",
       "beds": 2,
       "baths": 1,
@@ -203,7 +203,7 @@
   ],
   "settings": {
     "baseURL": "https://vivimoli.github.io/Airbnb/",
-    "whatsapp": "",
+    "whatsapp": "593983352920",
     "tiktok": "",
     "instagram": ""
   }
