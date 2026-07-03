@@ -36,13 +36,15 @@
         @keyframes fadeIn { from{opacity:0} to{opacity:1} }
         @keyframes scaleIn { from{opacity:0;transform:scale(0.96)} to{opacity:1;transform:scale(1)} }
         @keyframes slideRight { from{opacity:0;transform:translateX(24px)} to{opacity:1;transform:translateX(0)} }
-        @keyframes heroCrossfade { 0%{opacity:0;transform:scale(1.05)} 4%{opacity:1} 22%{opacity:1;transform:scale(1)} 28%{opacity:0;transform:scale(0.98)} 100%{opacity:0} }
+        @keyframes heroCrossfade { 0%{opacity:0;transform:scale(1.05)} 3%{opacity:1} 15%{opacity:1;transform:scale(1)} 18%{opacity:0;transform:scale(0.98)} 100%{opacity:0} }
 
-        .hero-slide { position:absolute; inset:0; background-size:cover; background-position:center; animation:heroCrossfade 25s ease-in-out infinite; opacity:0; }
+        .hero-slide { position:absolute; inset:0; background-size:cover; background-position:center; animation:heroCrossfade 30s ease-in-out infinite; opacity:0; }
         .hero-slide:nth-child(1) { animation-delay:0s; }
-        .hero-slide:nth-child(2) { animation-delay:6.25s; }
-        .hero-slide:nth-child(3) { animation-delay:12.5s; }
-        .hero-slide:nth-child(4) { animation-delay:18.75s; }
+        .hero-slide:nth-child(2) { animation-delay:5s; }
+        .hero-slide:nth-child(3) { animation-delay:10s; }
+        .hero-slide:nth-child(4) { animation-delay:15s; }
+        .hero-slide:nth-child(5) { animation-delay:20s; }
+        .hero-slide:nth-child(6) { animation-delay:25s; }
 
         .anim-fade-up { animation:fadeInUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
         .anim-fade { animation:fadeIn 0.4s ease both; }
@@ -149,6 +151,8 @@
         <div class="hero-slide" style="background-image:url('fotos/suite-13i/01.jpg');"></div>
         <div class="hero-slide" style="background-image:url('fotos/depto-20f/01.jpg');"></div>
         <div class="hero-slide" style="background-image:url('fotos/balcon/01.jpg');"></div>
+        <div class="hero-slide" style="background-image:url('fotos/depto-6d/01.jpg');"></div>
+        <div class="hero-slide" style="background-image:url('fotos/tonsupa/01.jpg');"></div>
         <div class="hero-slide" style="background-image:url('fotos/edificio/01.jpg');"></div>
         <div class="absolute inset-0" style="background:linear-gradient(to bottom, rgba(33,31,29,0.65), rgba(33,31,29,0.3) 50%, var(--bg));"></div>
         <div class="absolute inset-0 flex items-center justify-center text-center px-6">
@@ -572,7 +576,7 @@ function viewDetail(id) {
         (p.description ? '<div><h4 class="font-display font-bold text-sm uppercase tracking-wider mb-2 text-stone-400">Descripci\u00f3n</h4><p class="text-sm leading-relaxed text-stone-600">' + esc(p.description) + '</p></div>' : '') +
         (amenities.length > 0 ? '<div><h4 class="font-display font-bold text-sm uppercase tracking-wider mb-2 text-stone-400">Amenities</h4><div class="flex flex-wrap gap-2">' + amenities.map(function(a) { return '<span class="text-xs px-3 py-1.5 rounded-full font-medium bg-stone-100 text-stone-700 border border-stone-200/50"><i class="fa-solid fa-circle-check mr-1.5 text-emerald-700"></i>' + esc(a.trim()) + '</span>'; }).join('') + '</div></div>' : '') +
         (p.notes ? '<div class="rounded-xl p-4 bg-amber-50 border border-amber-200/50"><h4 class="font-display font-bold text-sm text-amber-900 mb-1 flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> Notas</h4><p class="text-xs text-amber-800 leading-relaxed">' + esc(p.notes) + '</p></div>' : '') +
-        '<div class="flex gap-3 pt-4"><a href="https://wa.me/' + (settings.whatsapp||'593991234567').replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent('Hola, me interesa: ' + p.name + ' (' + (p.building||'') + ' ' + (p.floor ? 'Piso '+p.floor : '') + (aptNum(p.apt) ? ' Depto '+aptNum(p.apt) : '') + ')') + '" target="_blank" class="btn-primary flex-1 text-sm"><i class="fa-brands fa-whatsapp mr-2"></i>Agendar</a><button onclick="closeModal(\'modal-detail\')" class="btn-secondary text-sm"><i class="fa-solid fa-xmark mr-2"></i>No me interesa</button></div>' +
+        '<div class="flex gap-3 pt-4"><a href="https://wa.me/' + (settings.whatsapp||'593991234567').replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent('Hola, quiero agendar: ' + p.name + ' (' + (p.building||'') + ' ' + (p.floor ? 'Piso '+p.floor : '') + (aptNum(p.apt) ? ' Depto '+aptNum(p.apt) : '') + ')') + '" target="_blank" class="btn-primary flex-1 text-sm"><i class="fa-solid fa-calendar-check mr-2"></i>Agendar</a><a href="https://wa.me/' + (settings.whatsapp||'593991234567').replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent('Hola, me interesa: ' + p.name + ' (' + (p.building||'') + ' ' + (p.floor ? 'Piso '+p.floor : '') + (aptNum(p.apt) ? ' Depto '+aptNum(p.apt) : '') + ')') + '" target="_blank" class="btn-secondary text-sm"><i class="fa-regular fa-star mr-2"></i>Me interesa</a></div>' +
         '</div>';
     openModal('modal-detail');
 }
