@@ -625,6 +625,7 @@ function showGuide(id) {
     var p = properties.find(function(pr) { return pr.id === id; });
     if (!p) return;
     var location = [p.building, p.floor ? 'Piso '+p.floor : '', p.apt ? 'Depto '+p.apt : ''].filter(Boolean).join(', ');
+    var amenities = (p.amenities||'').split('\n').map(function(a) { return a.trim(); }).filter(Boolean);
     var rules = (p.rules||'').split('\n').map(function(r) { return r.trim(); }).filter(Boolean);
     var notes = (p.notes||'').split('\n').map(function(n) { return n.trim(); }).filter(Boolean);
     var html = '<div class="p-6 sm:p-8">' +
@@ -658,6 +659,28 @@ function showGuide(id) {
             else if (/multa|costo|d[óo]lar|pag/i.test(rule)) icon = 'fa-solid fa-dollar-sign';
             else if (/prohibido|no\b/i.test(rule)) icon = 'fa-solid fa-ban';
             return '<div class="flex items-start gap-3 p-3 rounded-lg" style="background:var(--bg-alt);"><i class="' + icon + ' mt-0.5" style="color:var(--accent);font-size:0.8rem;"></i><span class="text-sm text-stone-700">' + esc(rule) + '</span></div>';
+        }).join('') + '</div></div>' : '') +
+        (amenities.length > 0 ? '<div class="mb-6"><h3 class="font-display font-bold text-sm uppercase tracking-wider mb-3 text-stone-500"><i class="fa-solid fa-star mr-2" style="color:var(--accent);"></i>Servicios y comodidades</h3><div class="flex flex-wrap gap-2">' + amenities.map(function(a) {
+            var icon = 'fa-solid fa-circle-check';
+            if (/wifi/i.test(a)) icon = 'fa-solid fa-wifi';
+            else if (/tv|televisi[oó]n|netflix/i.test(a)) icon = 'fa-solid fa-tv';
+            else if (/cocina|microondas|horno|refrigerador|congelador/i.test(a)) icon = 'fa-solid fa-kitchen-set';
+            else if (/lavadora|secadora/i.test(a)) icon = 'fa-solid fa-soap';
+            else if (/parqueadero|estacionamiento|garaje/i.test(a)) icon = 'fa-solid fa-car';
+            else if (/cama|dormitorio/i.test(a)) icon = 'fa-solid fa-bed';
+            else if (/baño|ducha|jacuzzi|sauna/i.test(a)) icon = 'fa-solid fa-bath';
+            else if (/gimnasio|ejercicio|fit/i.test(a)) icon = 'fa-solid fa-dumbbell';
+            else if (/piscina|alberca/i.test(a)) icon = 'fa-solid fa-person-swimming';
+            else if (/cine|sala/i.test(a)) icon = 'fa-solid fa-film';
+            else if (/vista|panor[aá]mica/i.test(a)) icon = 'fa-solid fa-mountain';
+            else if (/seguridad|c[aá]mara/i.test(a)) icon = 'fa-solid fa-shield';
+            else if (/ascensor|elevador/i.test(a)) icon = 'fa-solid fa-elevator';
+            else if (/aire|acondicionado|clima/i.test(a)) icon = 'fa-solid fa-snowflake';
+            else if (/calefacci[oó]n|calentador/i.test(a)) icon = 'fa-solid fa-temperature-high';
+            else if (/terraza|balc[oó]n/i.test(a)) icon = 'fa-solid fa-tree';
+            else if (/mascota/i.test(a)) icon = 'fa-solid fa-dog';
+            else if (/parrilla|bbq|barbacoa/i.test(a)) icon = 'fa-solid fa-fire';
+            return '<span class="text-xs px-3 py-1.5 rounded-full font-medium border" style="background:var(--bg-alt);border-color:var(--border);color:var(--text);"><i class="' + icon + ' mr-1.5" style="color:var(--accent);"></i>' + esc(a.trim()) + '</span>';
         }).join('') + '</div></div>' : '') +
         (notes.length > 0 ? '<div class="mb-6"><h3 class="font-display font-bold text-sm uppercase tracking-wider mb-3 text-stone-500"><i class="fa-solid fa-circle-info mr-2" style="color:var(--accent);"></i>Notas adicionales</h3><div class="space-y-2">' + notes.map(function(n) { return '<div class="flex items-start gap-3 p-3 rounded-lg" style="background:var(--bg-alt);"><i class="fa-solid fa-pen mt-0.5" style="color:var(--accent);font-size:0.8rem;"></i><span class="text-sm text-stone-700">' + esc(n.trim()) + '</span></div>'; }).join('') + '</div></div>' : '') +
         '<div class="pt-4 border-t text-center" style="border-color:var(--border);"><p class="text-xs text-stone-400">Comparte esta gu\u00eda con tus hu\u00e9spedes</p><div class="flex justify-center gap-3 mt-3">' +
