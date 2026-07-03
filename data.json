@@ -28,11 +28,11 @@
     {
       "id": "p_2",
       "type": "corta",
-      "name": "Depto 20F - Torre Solari",
+      "name": "Depto  piso 20- Torre Solari",
       "building": "Torre Solari",
       "floor": "20",
-      "apt": "F",
-      "price": "",
+      "apt": "",
+      "price": "1",
       "currency": "USD",
       "beds": 2,
       "baths": 2,
@@ -45,7 +45,7 @@
       "wifiName": "TorreSolari_Guest",
       "wifiPw": "Solari2024!",
       "rules": "No fumar\nNo alcohol\nNo mascotas\nNo visitas\nNo reuniones",
-      "welcome": "¡Bienvenido al 20F! Disfruta la mejor vista de Quito.",
+      "welcome": "¡Bienvenido al departamento piso 20! Disfruta la mejor vista de Quito.",
       "phone": "",
       "email": "",
       "notes": "Jacuzzi y sauna requieren reserva con 48h (lun-vie). Lunes jacuzzi en mantenimiento."
