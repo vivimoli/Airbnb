@@ -234,7 +234,7 @@
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div><label class="form-label" for="form-floor">Piso</label><input type="text" id="form-floor" class="form-input" placeholder="Ej: 15"></div>
-                    <div><label class="form-label" for="form-apt">Depto</label><input type="text" id="form-apt" class="form-input" placeholder="Ej: 1502"></div>
+                    <div><label class="form-label" for="form-apt">Depto</label><input type="text" id="form-apt" class="form-input" placeholder="Ej: 1502" oninput="this.value=this.value.replace(/\D/g,'')"></div>
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-4">
@@ -633,7 +633,6 @@ function openPropertyForm(id) {
         document.getElementById('form-promo-active').checked = !!p.promoActive;
         document.getElementById('form-promo-price').value = p.promoPrice||'';
         document.getElementById('promo-price-field').style.display = p.promoActive ? 'block' : 'none';
-        document.getElementById('promo-section').style.display = p.type === 'venta' ? 'block' : 'none';
         document.getElementById('form-parking').value = p.parking||'';
         document.getElementById('form-beds').value = p.beds||1;
         document.getElementById('form-baths').value = p.baths||1;
@@ -675,11 +674,6 @@ function editProperty(id) { openPropertyForm(id); }
 function onTypeChange() {
     var type = document.querySelector('input[name="form-type"]:checked');
     document.getElementById('corta-fields').style.display = type && type.value === 'corta' ? 'block' : 'none';
-    document.getElementById('promo-section').style.display = type && type.value === 'venta' ? 'block' : 'none';
-    if (type && type.value !== 'venta') {
-        document.getElementById('form-promo-active').checked = false;
-        document.getElementById('promo-price-field').style.display = 'none';
-    }
 }
 
 function handlePropertySubmit(e) {
