@@ -376,37 +376,54 @@ var GITHUB_REPO = 'Airbnb';
 var GITHUB_BRANCH = 'main';
 var DATA_FILE = 'data.json';
 
-function getGithubToken() { try { return localStorage.getItem(TOKEN_KEY)||''; } catch(e) { return ''; } }
-function setGithubToken(t) { try { if(t) localStorage.setItem(TOKEN_KEY, t); else localStorage.removeItem(TOKEN_KEY); } catch(e) {} }
+function getGithubToken() {
+    try { var t = localStorage.getItem(TOKEN_KEY); if (t) return t; } catch(e) {}
+    return settings._token || '';
+}
+function setGithubToken(t) {
+    try { if(t) localStorage.setItem(TOKEN_KEY, t); else localStorage.removeItem(TOKEN_KEY); } catch(e) {}
+    if (t) settings._token = t; else delete settings._token;
+}
 
 // ====== DATA LOADING ======
 function loadData() {
     try { var s = localStorage.getItem(STORAGE_KEY); if (s) { properties = JSON.parse(s); } } catch(e) {}
-    try { var s = localStorage.getItem(SETTINGS_KEY); if (s) { settings = Object.assign({}, settings, JSON.parse(s)); } } catch(e) {}
-    if (properties.length === 0) {
-        fetchDataFromServer();
-    }
+    try { var s = localStorage.getItem(SETTINGS_KEY); if (s) { 
+        var parsed = JSON.parse(s);
+        settings = Object.assign({}, settings, parsed);
+        if (parsed._token) setGithubToken(parsed._token);
+    } } catch(e) {}
+    // Always fetch latest from server (cache-busted)
+    fetchDataFromServer();
 }
 
 function fetchDataFromServer() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', DATA_FILE, true);
+    xhr.open('GET', DATA_FILE + '?t=' + Date.now(), true);
     xhr.onload = function() {
         if (xhr.status >= 200 && xhr.status < 300) {
             try {
                 var data = JSON.parse(xhr.responseText);
                 if (data.properties && data.properties.length > 0) {
                     properties = data.properties;
-                    if (data.settings) settings = Object.assign({}, settings, data.settings);
+                    if (data.settings) {
+                        var serverToken = data.settings._token;
+                        var localToken = getGithubToken();
+                        settings = Object.assign({}, settings, data.settings);
+                        // Keep local token if already set (user may have updated it)
+                        if (localToken) { settings._token = localToken; setGithubToken(localToken); }
+                        // If server has token and local doesn't, save it locally
+                        else if (serverToken) setGithubToken(serverToken);
+                    }
                     saveData(); saveSettingsData();
                     renderDashboard();
                     return;
                 }
             } catch(e) {}
         }
-        loadDemoData();
+        if (properties.length === 0) loadDemoData();
     };
-    xhr.onerror = function() { loadDemoData(); };
+    xhr.onerror = function() { if (properties.length === 0) loadDemoData(); };
     xhr.send();
 }
 
