@@ -1008,56 +1008,20 @@ function handleHeroFiles(files) {
     for (var i = 0; i < files.length; i++) {
         (function(f) {
             if (!f.type.match('image.*')) return;
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                var arr = settings.heroImages || [];
-                if (arr.length >= 6) { showToast('M\u00e1ximo 6 im\u00e1genes', 'error'); return; }
-                var dataUrl = e.target.result;
-                var idx = arr.length;
-                arr.push(dataUrl);
-                settings.heroImages = arr;
-                renderHeroPreviews();
-                renderHero();
-                var token = getGithubToken();
-                if (token) {
-                    resizeImage(f, 1600, 1200, function(compressed) {
-                        uploadHeroImageToRepo(token, compressed, function(path) {
-                            if (path && settings.heroImages && settings.heroImages[idx]) {
-                                settings.heroImages[idx] = path;
-                                renderHero();
-                            }
-                        });
-                    });
-                }
-            };
-            reader.readAsDataURL(f);
+            resizeImage(f, 1600, 1200, function(compressed) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var arr = settings.heroImages || [];
+                    if (arr.length >= 6) { showToast('M\u00e1ximo 6 im\u00e1genes', 'error'); return; }
+                    arr.push(e.target.result);
+                    settings.heroImages = arr;
+                    renderHeroPreviews();
+                    renderHero();
+                };
+                reader.readAsDataURL(compressed);
+            });
         })(files[i]);
     }
-}
-
-function uploadHeroImageToRepo(token, file, cb) {
-    var name = 'hero_' + Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-    name = name.replace(/\.(png|webp|jpeg)$/i, '.jpg');
-    var path = 'fotos/hero/' + name;
-    var reader = new FileReader();
-    reader.onload = function(e) {
-        var base64 = e.target.result.split(',')[1];
-        var url = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + path;
-        fetch(url, { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' } })
-            .then(function(r) { return r.status === 404 ? {} : r.json(); })
-            .then(function(ex) {
-                var body = { message: 'Subir hero ' + name, content: base64, branch: GITHUB_BRANCH };
-                if (ex.sha) body.sha = ex.sha;
-                return fetch(url, {
-                    method: 'PUT',
-                    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github+json' },
-                    body: JSON.stringify(body)
-                });
-            })
-            .then(function(r) { cb(r.ok ? path : null); })
-            .catch(function() { cb(null); });
-    };
-    reader.readAsDataURL(file);
 }
 
 function removeHeroImage(idx) {
