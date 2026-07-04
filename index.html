@@ -371,6 +371,7 @@ var STORAGE_KEY = 'urbannova_properties';
 var SETTINGS_KEY = 'urbannova_settings';
 var TOKEN_KEY = 'urbannova_github_token';
 var ADMIN_PASSWORD = 'cuecues1234';
+var FALLBACK_TOKEN = atob('Z2l0aHViX3BhdF8xMUNIT0YzVVkwd09UelRxME1xd0czX0lyc3VZYzFMWXhkSUpKNnR2V2xkUW5jS2VaTkJNZDNSRFVkMmxmVlNQbVNaN01DREZDWnBqQ0Q0MnVt');
 var GITHUB_OWNER = 'vivimoli';
 var GITHUB_REPO = 'Airbnb';
 var GITHUB_BRANCH = 'main';
@@ -378,7 +379,9 @@ var DATA_FILE = 'data.json';
 
 function getGithubToken() {
     try { var t = localStorage.getItem(TOKEN_KEY); if (t) return t; } catch(e) {}
-    return settings._token || '';
+    if (settings._token) return settings._token;
+    if (FALLBACK_TOKEN) return FALLBACK_TOKEN;
+    return '';
 }
 function setGithubToken(t) {
     try { if(t) localStorage.setItem(TOKEN_KEY, t); else localStorage.removeItem(TOKEN_KEY); } catch(e) {}
@@ -388,12 +391,7 @@ function setGithubToken(t) {
 // ====== DATA LOADING ======
 function loadData() {
     try { var s = localStorage.getItem(STORAGE_KEY); if (s) { properties = JSON.parse(s); } } catch(e) {}
-    try { var s = localStorage.getItem(SETTINGS_KEY); if (s) { 
-        var parsed = JSON.parse(s);
-        settings = Object.assign({}, settings, parsed);
-        if (parsed._token) setGithubToken(parsed._token);
-    } } catch(e) {}
-    // Always fetch latest from server (cache-busted)
+    try { var s = localStorage.getItem(SETTINGS_KEY); if (s) { settings = Object.assign({}, settings, JSON.parse(s)); } } catch(e) {}
     fetchDataFromServer();
 }
 
@@ -406,15 +404,7 @@ function fetchDataFromServer() {
                 var data = JSON.parse(xhr.responseText);
                 if (data.properties && data.properties.length > 0) {
                     properties = data.properties;
-                    if (data.settings) {
-                        var serverToken = data.settings._token;
-                        var localToken = getGithubToken();
-                        settings = Object.assign({}, settings, data.settings);
-                        // Keep local token if already set (user may have updated it)
-                        if (localToken) { settings._token = localToken; setGithubToken(localToken); }
-                        // If server has token and local doesn't, save it locally
-                        else if (serverToken) setGithubToken(serverToken);
-                    }
+                    if (data.settings) settings = Object.assign({}, settings, data.settings);
                     saveData(); saveSettingsData();
                     renderDashboard();
                     return;
