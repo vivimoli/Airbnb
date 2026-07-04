@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UrbanNova</title>
+    <title>UrbanNova — Gestión Exclusiva de Propiedades</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -140,7 +140,6 @@
                     <span class="font-display font-bold text-2xl tracking-tight">Urban<span class="gradient-text">Nova</span></span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button onclick="toggleLang()" id="lang-toggle" class="btn-sm bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold tracking-wide" title="Idioma / Language">EN</button>
                     <button onclick="adminLogout()" class="btn-sm admin-only bg-amber-700 hover:bg-amber-800 text-stone-100 shadow-md" title="Cerrar sesión"><i class="fa-solid fa-lock-open mr-1.5"></i>Salir</button>
                     <button onclick="openSettings()" class="btn-icon admin-only" title="Configuración"><i class="fa-solid fa-gear"></i></button>
                 </div>
@@ -153,18 +152,18 @@
         <div class="absolute inset-0" style="background:linear-gradient(to bottom, rgba(33,31,29,0.65), rgba(33,31,29,0.3) 50%, var(--bg));"></div>
         <div class="absolute inset-0 flex items-center justify-center text-center px-6">
             <div class="anim-fade-up max-w-2xl">
-                <p class="text-xs font-bold uppercase tracking-widest mb-3 text-amber-100" id="hero-tag"></p>
-                <h1 class="font-display text-4xl sm:text-6xl font-extrabold text-white mb-4 leading-tight" id="hero-title"></h1>
-                <p class="text-sm sm:text-base max-w-lg mx-auto text-stone-200" id="hero-desc"></p>
+                <p class="text-xs font-bold uppercase tracking-widest mb-3 text-amber-100">Colección de Espacios Premium</p>
+                <h1 class="font-display text-4xl sm:text-6xl font-extrabold text-white mb-4 leading-tight">Tu estadía ideal en <br><span class="gradient-text">el lugar correcto</span></h1>
+                <p class="text-sm sm:text-base max-w-lg mx-auto text-stone-200">Administración de renta fija, alquiler vacacional y venta de propiedades.</p>
             </div>
         </div>
     </section>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-10 pb-24">
         <div class="flex flex-wrap items-center justify-center gap-3 mb-10 anim-fade-up delay-1">
-            <button class="tab-btn" data-tab="fija" onclick="switchTab('fija')"><i class="fa-solid fa-calendar-check mr-2"></i><span class="tab-label" data-key="tabFija"></span></button>
-            <button class="tab-btn active" data-tab="corta" onclick="switchTab('corta')"><i class="fa-solid fa-moon mr-2"></i><span class="tab-label" data-key="tabCorta"></span></button>
-            <button class="tab-btn" data-tab="venta" onclick="switchTab('venta')"><i class="fa-solid fa-tag mr-2"></i><span class="tab-label" data-key="tabVenta"></span></button>
+            <button class="tab-btn" data-tab="fija" onclick="switchTab('fija')"><i class="fa-solid fa-calendar-check mr-2"></i>Renta Fija</button>
+            <button class="tab-btn active" data-tab="corta" onclick="switchTab('corta')"><i class="fa-solid fa-moon mr-2"></i>Renta Corta</button>
+            <button class="tab-btn" data-tab="venta" onclick="switchTab('venta')"><i class="fa-solid fa-tag mr-2"></i>Venta</button>
         </div>
         <div id="tab-description" class="text-center mb-8 anim-fade">
             <h2 class="font-display text-3xl font-bold mb-2 text-stone-900" id="tab-title"></h2>
@@ -175,7 +174,7 @@
             <div class="empty-icon"><i class="fa-solid fa-hotel text-3xl"></i></div>
             <h3 class="font-display text-2xl font-bold mb-2" id="empty-title"></h3>
             <p style="color:var(--text-muted);" class="mb-5 max-w-sm mx-auto text-sm" id="empty-subtitle"></p>
-            <button onclick="openPropertyForm()" class="btn-primary admin-only"><i class="fa-solid fa-plus mr-2"></i><span class="btn-label" data-key="addProp"></span></button>
+            <button onclick="openPropertyForm()" class="btn-primary admin-only"><i class="fa-solid fa-plus mr-2"></i>Añadir Propiedad</button>
         </div>
     </main>
 
@@ -185,111 +184,111 @@
         <a id="social-ig" href="https://instagram.com/" target="_blank" class="ig" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
     </div>
 
-    <button class="fab admin-only" onclick="openPropertyForm()" title="" id="fab-add"><i class="fa-solid fa-plus"></i></button>
+    <button class="fab admin-only" onclick="openPropertyForm()" title="Añadir propiedad"><i class="fa-solid fa-plus"></i></button>
 </div>
 
 <div id="modal-form" class="modal-overlay" role="dialog" aria-modal="true">
     <div class="modal-box">
         <div class="p-5 border-b flex items-center justify-between" style="border-color:var(--border);">
-            <h2 id="form-title" data-i18n="formTitle" class="font-display text-xl font-bold"></h2>
+            <h2 id="form-title" class="font-display text-xl font-bold">Ficha de Propiedad</h2>
             <button onclick="closeModal('modal-form')" class="btn-icon" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <form id="property-form" class="p-5 space-y-5" onsubmit="handlePropertySubmit(event)">
             <input type="hidden" id="form-id">
             <div>
-                    <label class="form-label" data-i18n="pubType"></label>
+                <label class="form-label">Tipo de Publicación</label>
                 <div class="flex gap-3">
                     <label class="flex-1 cursor-pointer">
                         <input type="radio" name="form-type" value="fija" class="sr-only peer" onchange="onTypeChange()">
                         <div class="text-center py-3 rounded-lg border-2 font-semibold text-xs tracking-wide uppercase transition-all peer-checked:border-amber-700 peer-checked:bg-amber-50 peer-checked:text-amber-900" style="border-color:var(--border);color:var(--text-muted);">
-                            <i class="fa-solid fa-calendar-check mr-1.5"></i><span data-i18n="fija"></span>
+                            <i class="fa-solid fa-calendar-check mr-1.5"></i>Fija
                         </div>
                     </label>
                     <label class="flex-1 cursor-pointer">
                         <input type="radio" name="form-type" value="corta" class="sr-only peer" onchange="onTypeChange()">
                         <div class="text-center py-3 rounded-lg border-2 font-semibold text-xs tracking-wide uppercase transition-all peer-checked:border-amber-700 peer-checked:bg-amber-50 peer-checked:text-amber-900" style="border-color:var(--border);color:var(--text-muted);">
-                            <i class="fa-solid fa-moon mr-1.5"></i><span data-i18n="corta"></span>
+                            <i class="fa-solid fa-moon mr-1.5"></i>Corta
                         </div>
                     </label>
                     <label class="flex-1 cursor-pointer">
                         <input type="radio" name="form-type" value="venta" class="sr-only peer" onchange="onTypeChange()">
                         <div class="text-center py-3 rounded-lg border-2 font-semibold text-xs tracking-wide uppercase transition-all peer-checked:border-amber-700 peer-checked:bg-amber-50 peer-checked:text-amber-900" style="border-color:var(--border);color:var(--text-muted);">
-                            <i class="fa-solid fa-tag mr-1.5"></i><span data-i18n="venta"></span>
+                            <i class="fa-solid fa-tag mr-1.5"></i>Venta
                         </div>
                     </label>
                 </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="sm:col-span-2">
-                    <label class="form-label" for="form-name" data-i18n="name"></label>
+                    <label class="form-label" for="form-name">Nombre / Título</label>
                     <input type="text" id="form-name" class="form-input" placeholder="Ej: Suite Deluxe" required>
                 </div>
                 <div>
-                    <label class="form-label" for="form-building" data-i18n="building"></label>
+                    <label class="form-label" for="form-building">Edificio</label>
                     <input type="text" id="form-building" class="form-input" placeholder="Ej: Torre Diamante">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
-                    <div><label class="form-label" for="form-floor" data-i18n="floor"></label><input type="text" id="form-floor" class="form-input" placeholder="Ej: 15"></div>
-                    <div><label class="form-label" for="form-apt" data-i18n="depto"></label><input type="text" id="form-apt" class="form-input" placeholder="Ej: 1502" oninput="this.value=this.value.replace(/\D/g,'')"></div>
+                    <div><label class="form-label" for="form-floor">Piso</label><input type="text" id="form-floor" class="form-input" placeholder="Ej: 15"></div>
+                    <div><label class="form-label" for="form-apt">Depto</label><input type="text" id="form-apt" class="form-input" placeholder="Ej: 1502" oninput="this.value=this.value.replace(/\D/g,'')"></div>
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-4">
-                <div><label class="form-label" for="form-price"><span data-i18n="price"></span> <span class="text-xs font-normal" style="color:var(--text-muted);" data-i18n="optional"></span></label><input type="text" id="form-price" class="form-input" placeholder="Ej: 120000"></div>
-                <div><label class="form-label" for="form-currency" data-i18n="currency"></label><select id="form-currency" class="form-input form-select"><option value="USD">USD</option><option value="ARS">ARS</option><option value="EUR">EUR</option></select></div>
+                <div><label class="form-label" for="form-price">Precio <span class="text-xs font-normal" style="color:var(--text-muted);">(opcional)</span></label><input type="text" id="form-price" class="form-input" placeholder="Ej: 120000"></div>
+                <div><label class="form-label" for="form-currency">Moneda</label><select id="form-currency" class="form-input form-select"><option value="USD">USD</option><option value="ARS">ARS</option><option value="EUR">EUR</option></select></div>
             </div>
             <div id="promo-section" class="rounded-xl p-4 bg-amber-50 border border-amber-200 mb-4">
                 <label class="flex items-center gap-2 cursor-pointer mb-3">
                     <input type="checkbox" id="form-promo-active" onchange="document.getElementById('promo-price-field').style.display=this.checked?'block':'none'">
-                    <span class="text-sm font-bold text-amber-900"><i class="fa-solid fa-tag mr-1"></i><span data-i18n="promoActive"></span></span>
+                    <span class="text-sm font-bold text-amber-900"><i class="fa-solid fa-tag mr-1"></i>Activar Precio Promocional</span>
                 </label>
                 <div id="promo-price-field" style="display:none;">
-                    <label class="form-label" for="form-promo-price" data-i18n="promoPrice"></label>
+                    <label class="form-label" for="form-promo-price">Precio con descuento</label>
                     <input type="text" id="form-promo-price" class="form-input" placeholder="Ej: 95000">
                 </div>
             </div>
             <div class="grid grid-cols-3 gap-3">
-                <div><label class="form-label" for="form-beds"><i class="fa-solid fa-bed mr-1"></i><span data-i18n="beds"></span></label><input type="number" id="form-beds" class="form-input" min="0" value="1"></div>
-                <div><label class="form-label" for="form-baths"><i class="fa-solid fa-bath mr-1"></i><span data-i18n="baths"></span></label><input type="number" id="form-baths" class="form-input" min="0" value="1"></div>
-                <div><label class="form-label" for="form-guests"><i class="fa-solid fa-user-group mr-1"></i><span data-i18n="guests"></span> <span class="text-xs font-normal" style="color:var(--text-muted);" data-i18n="optional"></span></label><input type="number" id="form-guests" class="form-input" min="0" value="" placeholder="Ej: 4"></div>
+                <div><label class="form-label" for="form-beds"><i class="fa-solid fa-bed mr-1"></i>Hab.</label><input type="number" id="form-beds" class="form-input" min="0" value="1"></div>
+                <div><label class="form-label" for="form-baths"><i class="fa-solid fa-bath mr-1"></i>Baños</label><input type="number" id="form-baths" class="form-input" min="0" value="1"></div>
+                <div><label class="form-label" for="form-guests"><i class="fa-solid fa-user-group mr-1"></i>Huéspedes <span class="text-xs font-normal" style="color:var(--text-muted);">(opcional)</span></label><input type="number" id="form-guests" class="form-input" min="0" value="" placeholder="Ej: 4"></div>
             </div>
-            <div><label class="form-label" for="form-parking"><i class="fa-solid fa-car mr-1"></i><span data-i18n="parking"></span></label><select id="form-parking" class="form-input form-select"><option value="" data-i18n="no"></option><option value="1 parqueadero" data-i18n="onePark"></option><option value="2 parqueaderos" data-i18n="twoPark"></option></select></div>
+            <div><label class="form-label" for="form-parking"><i class="fa-solid fa-car mr-1"></i>Parqueadero</label><select id="form-parking" class="form-input form-select"><option value="">No</option><option value="1 parqueadero">1 parqueadero</option><option value="2 parqueaderos">2 parqueaderos</option></select></div>
             <div class="grid grid-cols-2 gap-4">
-                <div><label class="form-label"><i class="fa-solid fa-images mr-1"></i><span data-i18n="coverPhoto"></span></label><input type="number" id="form-cover-index" class="form-input" min="1" value="1" placeholder="1"></div>
-                <div><label class="form-label flex items-center gap-2" style="padding-top:1.4rem;"><input type="checkbox" id="form-carousel-auto" class="w-4 h-4"><span class="text-sm font-medium" data-i18n="carAuto"></span></label></div>
+                <div><label class="form-label"><i class="fa-solid fa-images mr-1"></i>Foto de portada #</label><input type="number" id="form-cover-index" class="form-input" min="1" value="1" placeholder="1"></div>
+                <div><label class="form-label flex items-center gap-2" style="padding-top:1.4rem;"><input type="checkbox" id="form-carousel-auto" class="w-4 h-4"><span class="text-sm font-medium">Carrusel automático</span></label></div>
             </div>
             <div>
-                <label class="form-label"><i class="fa-solid fa-images mr-1"></i><span data-i18n="images"></span></label>
+                <label class="form-label"><i class="fa-solid fa-images mr-1"></i>Imágenes</label>
                 <div id="upload-area" class="border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition" style="border-color:var(--border);background:var(--bg);" onclick="document.getElementById('file-input').click()">
                     <i class="fa-solid fa-cloud-arrow-up text-2xl mb-2" style="color:var(--text-muted);"></i>
-                    <p class="text-sm font-medium" style="color:var(--text-muted);" data-i18n="dragHere"></p>
-                    <p class="text-xs mt-1" style="color:var(--text-muted);opacity:0.7;" data-i18n="imgFormats"></p>
+                    <p class="text-sm font-medium" style="color:var(--text-muted);">Arrastra fotos aquí o haz clic para seleccionar</p>
+                    <p class="text-xs mt-1" style="color:var(--text-muted);opacity:0.7;">Formatos: JPG, PNG, WEBP (se convierten a base64)</p>
                     <input type="file" id="file-input" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files)">
                 </div>
                 <div id="image-preview" class="flex flex-wrap gap-2 mt-3"></div>
             </div>
-            <div><label class="form-label" for="form-desc" data-i18n="desc"></label><textarea id="form-desc" class="form-input" rows="3" placeholder="Descripción detallada..."></textarea></div>
-            <div><label class="form-label" for="form-amenities" data-i18n="amenities"></label><textarea id="form-amenities" class="form-input" rows="2" placeholder="Wifi&#10;Piscina&#10;Estacionamiento"></textarea></div>
+            <div><label class="form-label" for="form-desc">Descripción</label><textarea id="form-desc" class="form-input" rows="3" placeholder="Descripción detallada..."></textarea></div>
+            <div><label class="form-label" for="form-amenities">Servicios / Amenities (uno por línea)</label><textarea id="form-amenities" class="form-input" rows="2" placeholder="Wifi&#10;Piscina&#10;Estacionamiento"></textarea></div>
             <div id="corta-fields" style="display:none;border-top:1.5px dashed var(--border);" class="space-y-4 pt-4">
-                <p class="text-sm font-bold tracking-wide text-amber-800"><i class="fa-solid fa-circle-info mr-1"></i><span data-i18n="guestData"></span></p>
+                <p class="text-sm font-bold tracking-wide text-amber-800"><i class="fa-solid fa-circle-info mr-1"></i> Datos para Huéspedes</p>
                 <div class="grid grid-cols-2 gap-4">
-                    <div><label class="form-label" for="form-checkin" data-i18n="checkin"></label><input type="text" id="form-checkin" class="form-input" placeholder="15:00"></div>
-                    <div><label class="form-label" for="form-checkout" data-i18n="checkout"></label><input type="text" id="form-checkout" class="form-input" placeholder="11:00"></div>
+                    <div><label class="form-label" for="form-checkin">Check-in</label><input type="text" id="form-checkin" class="form-input" placeholder="15:00"></div>
+                    <div><label class="form-label" for="form-checkout">Check-out</label><input type="text" id="form-checkout" class="form-input" placeholder="11:00"></div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
-                    <div><label class="form-label" for="form-wifi-name"><i class="fa-solid fa-wifi mr-1"></i><span data-i18n="wifiNet"></span></label><input type="text" id="form-wifi-name" class="form-input" placeholder="Red_Guest"></div>
-                    <div><label class="form-label" for="form-wifi-pw" data-i18n="wifiPw"></label><input type="text" id="form-wifi-pw" class="form-input" placeholder="Clave123"></div>
+                    <div><label class="form-label" for="form-wifi-name"><i class="fa-solid fa-wifi mr-1"></i>Red WiFi</label><input type="text" id="form-wifi-name" class="form-input" placeholder="Red_Guest"></div>
+                    <div><label class="form-label" for="form-wifi-pw">Contraseña WiFi</label><input type="text" id="form-wifi-pw" class="form-input" placeholder="Clave123"></div>
                 </div>
-                <div><label class="form-label" for="form-rules" data-i18n="rules"></label><textarea id="form-rules" class="form-input" rows="2" placeholder="No fumar&#10;No fiestas"></textarea></div>
-                <div><label class="form-label" for="form-welcome" data-i18n="welcome"></label><textarea id="form-welcome" class="form-input" rows="2" placeholder="¡Bienvenido!"></textarea></div>
+                <div><label class="form-label" for="form-rules">Normas</label><textarea id="form-rules" class="form-input" rows="2" placeholder="No fumar&#10;No fiestas"></textarea></div>
+                <div><label class="form-label" for="form-welcome">Mensaje de Bienvenida</label><textarea id="form-welcome" class="form-input" rows="2" placeholder="¡Bienvenido!"></textarea></div>
                 <div class="grid grid-cols-2 gap-4">
-                    <div><label class="form-label" for="form-phone" data-i18n="phone"></label><input type="tel" id="form-phone" class="form-input" placeholder="+593 99 123 4567"></div>
-                    <div><label class="form-label" for="form-email" data-i18n="email"></label><input type="email" id="form-email" class="form-input" placeholder="soporte@urbannova.com"></div>
+                    <div><label class="form-label" for="form-phone">Teléfono</label><input type="tel" id="form-phone" class="form-input" placeholder="+593 99 123 4567"></div>
+                    <div><label class="form-label" for="form-email">Email</label><input type="email" id="form-email" class="form-input" placeholder="soporte@urbannova.com"></div>
                 </div>
-                <div><label class="form-label" for="form-notes" data-i18n="notes"></label><textarea id="form-notes" class="form-input" rows="2" placeholder="Instrucciones extra..."></textarea></div>
+                <div><label class="form-label" for="form-notes">Notas adicionales</label><textarea id="form-notes" class="form-input" rows="2" placeholder="Instrucciones extra..."></textarea></div>
             </div>
             <div class="flex gap-3 pt-3 border-t" style="border-color:var(--border);">
-                <button type="submit" class="btn-primary flex-1" id="form-submit-btn"><i class="fa-solid fa-save mr-2"></i><span data-i18n="save"></span></button>
-                <button type="button" onclick="closeModal('modal-form')" class="btn-secondary"><span data-i18n="cancel"></span></button>
+                <button type="submit" class="btn-primary flex-1" id="form-submit-btn"><i class="fa-solid fa-save mr-2"></i>Guardar</button>
+                <button type="button" onclick="closeModal('modal-form')" class="btn-secondary">Cancelar</button>
             </div>
         </form>
     </div>
@@ -310,43 +309,43 @@
 <div id="modal-settings" class="modal-overlay" role="dialog" aria-modal="true">
     <div class="modal-box" style="max-width:500px;">
         <div class="p-5 border-b flex items-center justify-between" style="border-color:var(--border);">
-            <h2 class="font-display text-xl font-bold" data-i18n="settings"></h2>
+            <h2 class="font-display text-xl font-bold">Configuración</h2>
             <button onclick="closeModal('modal-settings')" class="btn-icon" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="p-5 space-y-5">
-            <div><label class="form-label" for="setting-baseurl" data-i18n="baseURL"></label><input type="url" id="setting-baseurl" class="form-input" placeholder="https://tusitio.com/index.html"></div>
-            <div><label class="form-label" for="setting-whatsapp" data-i18n="whatsapp"></label><input type="text" id="setting-whatsapp" class="form-input" placeholder="593991234567"></div>
-            <div><label class="form-label" for="setting-tiktok" data-i18n="tiktok"></label><input type="text" id="setting-tiktok" class="form-input" placeholder="@urbannova"></div>
-            <div><label class="form-label" for="setting-instagram" data-i18n="instagram"></label><input type="text" id="setting-instagram" class="form-input" placeholder="@urbannova"></div>
+            <div><label class="form-label" for="setting-baseurl">URL Base</label><input type="url" id="setting-baseurl" class="form-input" placeholder="https://tusitio.com/index.html"></div>
+            <div><label class="form-label" for="setting-whatsapp">WhatsApp</label><input type="text" id="setting-whatsapp" class="form-input" placeholder="593991234567"></div>
+            <div><label class="form-label" for="setting-tiktok">TikTok</label><input type="text" id="setting-tiktok" class="form-input" placeholder="@urbannova"></div>
+            <div><label class="form-label" for="setting-instagram">Instagram</label><input type="text" id="setting-instagram" class="form-input" placeholder="@urbannova"></div>
             <div class="admin-only-block" style="display:none;">
                 <div class="border-t pt-4" style="border-color:var(--border);">
-                    <label class="form-label" for="setting-github-token"><span data-i18n="ghToken"></span> <span class="text-amber-700" data-i18n="admin"></span></label>
+                    <label class="form-label" for="setting-github-token">Token de GitHub <span class="text-amber-700">(admin)</span></label>
                     <input type="password" id="setting-github-token" class="form-input" placeholder="github_pat_...">
-                    <p class="text-xs text-stone-400 mt-1" data-i18n="ghTokenDesc"></p>
+                    <p class="text-xs text-stone-400 mt-1">Necesario para publicar cambios en GitHub automáticamente.</p>
                 </div>
                 <div class="border-t pt-4" style="border-color:var(--border);">
-                    <label class="form-label"><i class="fa-solid fa-image mr-1"></i><span data-i18n="heroImg"></span> <span class="text-amber-700">(fondo)</span></label>
-                    <p class="text-xs text-stone-400 mb-2" data-i18n="heroImgDesc"></p>
+                    <label class="form-label"><i class="fa-solid fa-image mr-1"></i>Imágenes del Hero <span class="text-amber-700">(fondo)</span></label>
+                    <p class="text-xs text-stone-400 mb-2">Las fotos que aparecen detrás del texto principal.</p>
                     <div id="hero-images-preview" class="flex flex-wrap gap-2 mb-3"></div>
                     <div id="hero-upload-area" class="border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition" style="border-color:var(--border);background:var(--bg);" onclick="document.getElementById('hero-file-input').click()">
                         <i class="fa-solid fa-cloud-arrow-up text-lg mb-1" style="color:var(--text-muted);"></i>
-                        <p class="text-xs font-medium" style="color:var(--text-muted);" data-i18n="addHero"></p>
+                        <p class="text-xs font-medium" style="color:var(--text-muted);">Agregar foto al hero</p>
                         <input type="file" id="hero-file-input" accept="image/*" multiple style="display:none" onchange="handleHeroFiles(this.files)">
                     </div>
                 </div>
             </div>
             <div class="flex gap-3 pt-3">
-                <button onclick="saveSettings()" class="btn-primary flex-1"><i class="fa-solid fa-check mr-2"></i><span data-i18n="save"></span></button>
-                <button onclick="closeModal('modal-settings')" class="btn-secondary"><span data-i18n="cancel"></span></button>
+                <button onclick="saveSettings()" class="btn-primary flex-1"><i class="fa-solid fa-check mr-2"></i>Guardar</button>
+                <button onclick="closeModal('modal-settings')" class="btn-secondary">Cancelar</button>
             </div>
             <div class="pt-4 border-t" style="border-color:var(--border);">
-                <p class="text-xs font-semibold text-stone-500 mb-2" data-i18n="dataSection"></p>
+                <p class="text-xs font-semibold text-stone-500 mb-2">DATOS</p>
                 <div class="flex gap-2">
-                    <button onclick="exportData()" class="btn-sm flex-1 bg-stone-100 hover:bg-stone-200 text-stone-700"><i class="fa-solid fa-download mr-1"></i><span data-i18n="exportJSON"></span></button>
-                    <button onclick="document.getElementById('importFile').click()" class="btn-sm flex-1 bg-stone-100 hover:bg-stone-200 text-stone-700"><i class="fa-solid fa-upload mr-1"></i><span data-i18n="importJSON"></span></button>
+                    <button onclick="exportData()" class="btn-sm flex-1 bg-stone-100 hover:bg-stone-200 text-stone-700"><i class="fa-solid fa-download mr-1"></i>Exportar JSON</button>
+                    <button onclick="document.getElementById('importFile').click()" class="btn-sm flex-1 bg-stone-100 hover:bg-stone-200 text-stone-700"><i class="fa-solid fa-upload mr-1"></i>Importar JSON</button>
                     <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
                 </div>
-                <p class="text-xs text-stone-400 mt-1" data-i18n="exportDesc"></p>
+                <p class="text-xs text-stone-400 mt-1">Exporta tus propiedades para respaldo.</p>
             </div>
         </div>
     </div>
@@ -356,11 +355,11 @@
     <div class="modal-box" style="max-width:380px;">
         <div class="p-6 text-center">
             <div class="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center bg-red-50"><i class="fa-solid fa-trash-can text-xl" style="color:var(--red);"></i></div>
-            <h2 class="font-display text-lg font-bold mb-2" data-i18n="delTitle"></h2>
-            <p class="text-sm mb-6 text-stone-500" data-i18n="delDesc"></p>
+            <h2 class="font-display text-lg font-bold mb-2">¿Eliminar Propiedad?</h2>
+            <p class="text-sm mb-6 text-stone-500">Esta acción no se puede deshacer.</p>
             <div class="flex gap-3 justify-center">
-                <button onclick="confirmDelete()" class="btn-sm flex-1 bg-red-600 hover:bg-red-700 text-white rounded-lg py-3 font-semibold"><span data-i18n="delBtn"></span></button>
-                <button onclick="closeModal('modal-delete')" class="btn-sm flex-1 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg py-3 font-semibold"><span data-i18n="cancelBtn"></span></button>
+                <button onclick="confirmDelete()" class="btn-sm flex-1 bg-red-600 hover:bg-red-700 text-white rounded-lg py-3 font-semibold">Eliminar</button>
+                <button onclick="closeModal('modal-delete')" class="btn-sm flex-1 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg py-3 font-semibold">Cancelar</button>
             </div>
         </div>
     </div>
@@ -385,148 +384,6 @@ var GITHUB_OWNER = 'vivimoli';
 var GITHUB_REPO = 'Airbnb';
 var GITHUB_BRANCH = 'main';
 var DATA_FILE = 'data.json';
-var _lang = (function(){try{return localStorage.getItem('urbannova_lang')||'es'}catch(e){return 'es'}})();
-
-var _tr = {
-  'es': {
-    langBtn: 'EN', title: 'UrbanNova — Gestión Exclusiva de Propiedades',
-    salir: 'Salir', heroTag: 'Colección de Espacios Premium',
-    heroTitle: 'Tu estadía ideal en <br>el lugar correcto',
-    heroDesc: 'Administración de renta fija, alquiler vacacional y venta de propiedades.',
-    tabFija: 'Renta Fija', tabCorta: 'Renta Corta', tabVenta: 'Venta',
-    fijaSub: 'Contratos a mediano y largo plazo.', cortaSub: 'Estadías por días o semanas.',
-    ventaSub: 'Oportunidades inmobiliarias seleccionadas.',
-    badgeFija: 'RENTA FIJA', badgeCorta: 'RENTA CORTA', badgeVenta: 'EN VENTA',
-    sinProps: 'Sin propiedades en', addPropPara: 'Añada una propiedad para comenzar.',
-    addProp: 'Añadir Propiedad', fabAdd: 'Añadir propiedad',
-    formTitle: 'Ficha de Propiedad', formEdit: 'Editar Propiedad', formNew: 'Nueva Propiedad',
-    pubType: 'Tipo de Publicación', fija: 'Fija', corta: 'Corta', venta: 'Venta',
-    name: 'Nombre / Título', building: 'Edificio', floor: 'Piso', depto: 'Depto',
-    price: 'Precio', optional: '(opcional)', currency: 'Moneda',
-    promoActive: 'Activar Precio Promocional', promoPrice: 'Precio con descuento',
-    beds: 'Hab.', baths: 'Baños', guests: 'Huéspedes', parking: 'Parqueadero',
-    no: 'No', onePark: '1 parqueadero', twoPark: '2 parqueaderos',
-    coverPhoto: 'Foto de portada #', carAuto: 'Carrusel automático',
-    images: 'Imágenes', dragHere: 'Arrastra fotos aquí o haz clic para seleccionar',
-    imgFormats: 'Formatos: JPG, PNG, WEBP (se convierten a base64)',
-    desc: 'Descripción', amenities: 'Servicios / Amenities (uno por línea)',
-    guestData: 'Datos para Huéspedes', checkin: 'Check-in', checkout: 'Check-out',
-    wifiNet: 'Red WiFi', wifiPw: 'Contraseña WiFi', rules: 'Normas',
-    welcome: 'Mensaje de Bienvenida', phone: 'Teléfono', email: 'Email',
-    notes: 'Notas adicionales', save: 'Guardar', cancel: 'Cancelar',
-    settings: 'Configuración', baseURL: 'URL Base', whatsapp: 'WhatsApp',
-    tiktok: 'TikTok', instagram: 'Instagram', ghToken: 'Token de GitHub',
-    ghTokenDesc: 'Necesario para publicar cambios en GitHub automáticamente.',
-    heroImg: 'Imágenes del Hero', heroImgDesc: 'Las fotos que aparecen detrás del texto principal.',
-    addHero: 'Agregar foto al hero', dataSection: 'DATOS',
-    exportJSON: 'Exportar JSON', importJSON: 'Importar JSON',
-    exportDesc: 'Exporta tus propiedades para respaldo.',
-    delTitle: '¿Eliminar Propiedad?', delDesc: 'Esta acción no se puede deshacer.',
-    delBtn: 'Eliminar', cancelBtn: 'Cancelar',
-    viewBtn: 'Ver', guideBtn: 'Guía', noPhoto: 'Sin foto', more: '+ Más',
-    detailDesc: 'Descripción', detailAmen: 'Amenities', detailNotes: 'Notas',
-    consultPrice: 'Consultar precio — contáctanos por WhatsApp',
-    consultPriceShort: 'Consultar precio',
-    reservar: 'Reservar', comprar: 'Comprar', agendar: 'Agendar cita',
-    meInteresa: 'Me interesa', guideBtn2: 'Guía',
-    gCheckin: 'Check-in', gCheckout: 'Check-out', gParking: 'Parqueadero',
-    gFloor: 'Piso', gWifi: 'WiFi', gNet: 'Red:', gPw: 'Contraseña:',
-    gRules: 'Reglas', gAmen: 'Servicios y comodidades', gNotes: 'Notas adicionales',
-    shareGuide: 'Comparte esta guía con tus huéspedes',
-    copyLink: 'Copiar enlace', share: 'Compartir',
-    publishing: 'Publicando...', published: 'Publicado', pubError: 'Error al publicar',
-    connError: 'Error de conexión', confirmLogout: '¿Cerrar sesión admin?',
-    sessionClosed: 'Sesión cerrada', adminPwd: 'Contraseña de administrador:',
-    adminOn: 'Modo admin activado', wrongPwd: 'Contraseña incorrecta',
-    linkCopied: 'Enlace copiado', copyFail: 'No se pudo copiar',
-    propUpdated: 'Propiedad actualizada', propCreated: 'Propiedad creada',
-    propDeleted: 'Propiedad eliminada', configSaved: 'Configuración guardada',
-    dataExported: 'Datos exportados', dataImported: 'Datos importados correctamente',
-    invalidFile: 'Archivo inválido', importError: 'Error al importar:',
-    maxHero: 'Máximo 6 imágenes', perNight: '/noche', perMonth: '/mes',
-    askingPrice: 'Consultar precio', admin: '(admin)',
-  },
-  'en': {
-    langBtn: 'ES', title: 'UrbanNova — Exclusive Property Management',
-    salir: 'Logout', heroTag: 'Premium Spaces Collection',
-    heroTitle: 'Your ideal stay in <br>the right place',
-    heroDesc: 'Long-term rental, short-stay, and property sales management.',
-    tabFija: 'Long Term', tabCorta: 'Short Stay', tabVenta: 'Sale',
-    fijaSub: 'Medium and long-term contracts.', cortaSub: 'Stays by day or week.',
-    ventaSub: 'Selected real estate opportunities.',
-    badgeFija: 'LONG TERM', badgeCorta: 'SHORT STAY', badgeVenta: 'FOR SALE',
-    sinProps: 'No properties in', addPropPara: 'Add a property to get started.',
-    addProp: 'Add Property', fabAdd: 'Add property',
-    formTitle: 'Property Card', formEdit: 'Edit Property', formNew: 'New Property',
-    pubType: 'Listing Type', fija: 'Long Term', corta: 'Short Stay', venta: 'Sale',
-    name: 'Name / Title', building: 'Building', floor: 'Floor', depto: 'Apt',
-    price: 'Price', optional: '(optional)', currency: 'Currency',
-    promoActive: 'Enable Promo Price', promoPrice: 'Discounted Price',
-    beds: 'Bedr.', baths: 'Baths', guests: 'Guests', parking: 'Parking',
-    no: 'No', onePark: '1 space', twoPark: '2 spaces',
-    coverPhoto: 'Cover Photo #', carAuto: 'Auto carousel',
-    images: 'Images', dragHere: 'Drag photos here or click to select',
-    imgFormats: 'Formats: JPG, PNG, WEBP (converted to base64)',
-    desc: 'Description', amenities: 'Services / Amenities (one per line)',
-    guestData: 'Guest Info', checkin: 'Check-in', checkout: 'Check-out',
-    wifiNet: 'WiFi Network', wifiPw: 'WiFi Password', rules: 'Rules',
-    welcome: 'Welcome Message', phone: 'Phone', email: 'Email',
-    notes: 'Additional Notes', save: 'Save', cancel: 'Cancel',
-    settings: 'Settings', baseURL: 'Base URL', whatsapp: 'WhatsApp',
-    tiktok: 'TikTok', instagram: 'Instagram', ghToken: 'GitHub Token',
-    ghTokenDesc: 'Required to auto-publish changes to GitHub.',
-    heroImg: 'Hero Images', heroImgDesc: 'Photos displayed behind the main text.',
-    addHero: 'Add hero photo', dataSection: 'DATA',
-    exportJSON: 'Export JSON', importJSON: 'Import JSON',
-    exportDesc: 'Export your properties for backup.',
-    delTitle: 'Delete Property?', delDesc: 'This action cannot be undone.',
-    delBtn: 'Delete', cancelBtn: 'Cancel',
-    viewBtn: 'View', guideBtn: 'Guide', noPhoto: 'No photo', more: '+ More',
-    detailDesc: 'Description', detailAmen: 'Amenities', detailNotes: 'Notes',
-    consultPrice: 'Ask for price — contact us on WhatsApp',
-    consultPriceShort: 'Ask for price',
-    reservar: 'Book', comprar: 'Buy', agendar: 'Schedule visit',
-    meInteresa: 'I\'m interested', guideBtn2: 'Guide',
-    gCheckin: 'Check-in', gCheckout: 'Check-out', gParking: 'Parking',
-    gFloor: 'Floor', gWifi: 'WiFi', gNet: 'Network:', gPw: 'Password:',
-    gRules: 'Rules', gAmen: 'Services & amenities', gNotes: 'Additional Notes',
-    shareGuide: 'Share this guide with your guests',
-    copyLink: 'Copy link', share: 'Share',
-    publishing: 'Publishing...', published: 'Published', pubError: 'Publish error',
-    connError: 'Connection error', confirmLogout: 'Log out as admin?',
-    sessionClosed: 'Session closed', adminPwd: 'Admin password:',
-    adminOn: 'Admin mode activated', wrongPwd: 'Incorrect password',
-    linkCopied: 'Link copied', copyFail: 'Could not copy',
-    propUpdated: 'Property updated', propCreated: 'Property created',
-    propDeleted: 'Property deleted', configSaved: 'Settings saved',
-    dataExported: 'Data exported', dataImported: 'Data imported successfully',
-    invalidFile: 'Invalid file', importError: 'Import error:',
-    maxHero: 'Maximum 6 images', perNight: '/night', perMonth: '/month',
-    askingPrice: 'Ask for price', admin: '(admin)',
-  }
-};
-
-function t(k) { return (_tr[_lang] && _tr[_lang][k]) || (_tr['es'] && _tr['es'][k]) || k; }
-function toggleLang() {
-  _lang = _lang === 'es' ? 'en' : 'es';
-  try { localStorage.setItem('urbannova_lang', _lang); } catch(e) {}
-  applyI18n();
-  renderDashboard();
-  renderHero();
-}
-function applyI18n() {
-  document.documentElement.lang = _lang;
-  document.title = t('title');
-  document.getElementById('lang-toggle').textContent = t('langBtn');
-  document.getElementById('hero-tag').textContent = t('heroTag');
-  document.getElementById('hero-title').innerHTML = t('heroTitle');
-  document.getElementById('hero-desc').textContent = t('heroDesc');
-  document.getElementById('fab-add').title = t('fabAdd');
-  document.querySelectorAll('[data-i18n]').forEach(function(el) {
-    var key = el.dataset.i18n;
-    if (key) el.innerHTML = t(key);
-  });
-}
 
 function getGithubToken() {
     try { var t = localStorage.getItem(TOKEN_KEY); if (t) return t; } catch(e) {}
@@ -601,7 +458,7 @@ function publishToGitHub() {
     var token = getGithubToken();
     if (!token) return;
     var ps = document.getElementById('publish-status');
-    if (ps) { ps.className = 'publish-status publishing'; ps.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ' + t('publishing'); }
+    if (ps) { ps.className = 'publish-status publishing'; ps.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Publicando...'; }
     var payload = { properties: properties, settings: settings };
     var jsonStr = JSON.stringify(payload, null, 2);
     var encoded = btoa(unescape(encodeURIComponent(jsonStr)));
@@ -619,14 +476,14 @@ function publishToGitHub() {
         })
         .then(function(r) {
             if (r.ok) {
-                if (ps) { ps.className = 'publish-status published'; ps.innerHTML = '<i class="fa-solid fa-check-circle"></i> ' + t('published'); }
+                if (ps) { ps.className = 'publish-status published'; ps.innerHTML = '<i class="fa-solid fa-check-circle"></i> Publicado'; }
                 setTimeout(function() { if(ps) { ps.style.display = 'none'; } }, 4000);
             } else {
-                if (ps) { ps.className = 'publish-status error'; ps.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + t('pubError'); }
+                if (ps) { ps.className = 'publish-status error'; ps.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Error al publicar'; }
             }
         })
         .catch(function() {
-            if (ps) { ps.className = 'publish-status error'; ps.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + t('connError'); }
+            if (ps) { ps.className = 'publish-status error'; ps.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Error de conexi\u00f3n'; }
         });
 }
 
@@ -638,10 +495,10 @@ function checkAdminAuth() {
 }
 
 function adminLogout() {
-    if (confirm(t('confirmLogout'))) {
+    if (confirm('\u00bfCerrar sesi\u00f3n admin?')) {
         isAdmin = false; try { sessionStorage.removeItem('urbannova_admin'); } catch(e) {}
         document.body.classList.remove('admin-mode'); renderProperties();
-        showToast(t('sessionClosed'), 'info');
+        showToast('Sesi\u00f3n cerrada', 'info');
     }
 }
 
@@ -654,28 +511,28 @@ document.getElementById('navTitle').addEventListener('click', function() {
     if (adminClicks >= 3) {
         adminClicks = 0; clearTimeout(adminTimer);
         if (isAdmin) {
-            if (confirm(t('confirmLogout'))) { isAdmin = false; try { sessionStorage.removeItem('urbannova_admin'); } catch(e) {} document.body.classList.remove('admin-mode'); renderProperties(); showToast(t('sessionClosed'), 'info'); }
+            if (confirm('\u00bfCerrar sesi\u00f3n admin?')) { isAdmin = false; try { sessionStorage.removeItem('urbannova_admin'); } catch(e) {} document.body.classList.remove('admin-mode'); renderProperties(); showToast('Sesi\u00f3n cerrada', 'info'); }
         } else {
-            var pwd = prompt(t('adminPwd'));
-            if (pwd === ADMIN_PASSWORD) { isAdmin = true; try { sessionStorage.setItem('urbannova_admin', 'true'); } catch(e) {} document.body.classList.add('admin-mode'); renderProperties(); showToast(t('adminOn'), 'success'); }
-            else if (pwd !== null) showToast(t('wrongPwd'), 'error');
+            var pwd = prompt('Contrase\u00f1a de administrador:');
+            if (pwd === ADMIN_PASSWORD) { isAdmin = true; try { sessionStorage.setItem('urbannova_admin', 'true'); } catch(e) {} document.body.classList.add('admin-mode'); renderProperties(); showToast('Modo admin activado', 'success'); }
+            else if (pwd !== null) showToast('Contrase\u00f1a incorrecta', 'error');
         }
     }
 });
 
 // ====== TABS ======
 var tabInfo = {
-    fija: { titleKey: 'tabFija', subKey: 'fijaSub', badgeKey: 'badgeFija', badge: 'badge-fija' },
-    corta: { titleKey: 'tabCorta', subKey: 'cortaSub', badgeKey: 'badgeCorta', badge: 'badge-corta' },
-    venta: { titleKey: 'tabVenta', subKey: 'ventaSub', badgeKey: 'badgeVenta', badge: 'badge-venta' },
+    fija: { title: 'Renta Fija', subtitle: 'Contratos a mediano y largo plazo.', badge: 'badge-fija', badgeText: 'RENTA FIJA' },
+    corta: { title: 'Renta Corta', subtitle: 'Estad\u00edas por d\u00edas o semanas.', badge: 'badge-corta', badgeText: 'RENTA CORTA' },
+    venta: { title: 'Venta', subtitle: 'Oportunidades inmobiliarias seleccionadas.', badge: 'badge-venta', badgeText: 'EN VENTA' },
 };
 
 function switchTab(t) {
     activeTab = t;
     document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.tab === t); });
     var info = tabInfo[t];
-    document.getElementById('tab-title').textContent = t(info.titleKey);
-    document.getElementById('tab-subtitle').textContent = t(info.subKey);
+    document.getElementById('tab-title').textContent = info.title;
+    document.getElementById('tab-subtitle').textContent = info.subtitle;
     renderProperties();
 }
 
@@ -687,8 +544,8 @@ function renderProperties() {
     var filtered = properties.filter(function(p) { return p.type === activeTab; });
     if (filtered.length === 0) {
         grid.innerHTML = ''; empty.style.display = 'block';
-        document.getElementById('empty-title').textContent = t('sinProps') + ' ' + t(info.titleKey);
-        document.getElementById('empty-subtitle').textContent = t('addPropPara');
+        document.getElementById('empty-title').textContent = 'Sin propiedades en ' + info.title;
+        document.getElementById('empty-subtitle').textContent = 'A\u00f1ada una propiedad para comenzar.';
         return;
     }
     empty.style.display = 'none';
@@ -700,24 +557,24 @@ function renderProperties() {
         var ci = Math.min(p.coverIndex || 0, coverImgs.length - 1);
         if (ci > 0) coverImgs = coverImgs.slice(ci).concat(coverImgs.slice(0, ci));
         var autoAttr = p.carouselAuto ? ' data-auto="1"' : '';
-var priceLabel = p.type === 'fija' ? t('perMonth') : p.type === 'corta' ? t('perNight') : '';
+        var priceLabel = p.type === 'fija' ? '/mes' : p.type === 'corta' ? '/noche' : '';
         var currencySymbol = p.currency === 'USD' ? 'US$' : p.currency === 'EUR' ? '\u20ac' : '$';
         var amenities = (p.amenities||'').split('\n').filter(function(a) { return a.trim(); }).slice(0,4);
         var hasMore = (p.amenities||'').split('\n').filter(function(a) { return a.trim(); }).length > 4;
-        var defaultImg = function(){return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500"><rect fill="#EAE3D8" width="800" height="500"/><text x="400" y="250" text-anchor="middle" fill="#9A6A38" font-size="20" font-family="sans-serif">' + t('noPhoto') + '</text></svg>');};
+        var defaultImg = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%22500%22%3E%3Crect fill=%22%23EAE3D8%22 width=%22800%22 height=%22500%22/%3E%3Ctext x=%22400%22 y=%22250%22 text-anchor=%22middle%22 fill=%22%239A6A38%22 font-size=%2220%22 font-family=%22sans-serif%22%3ESin foto%3C/text%3E%3C/svg%3E';
         return '<div class="prop-card anim-fade-up delay-' + Math.min(i+1,6) + '">' +
             '<div class="carousel-container"' + autoAttr + ' onmouseenter="carouselPause(this)" onmouseleave="carouselResume(this)">' +
-            (coverImgs.length > 0 ? '<div class="carousel-track" data-index="0">' + coverImgs.map(function(u) { return '<img src="' + esc(u) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">'; }).join('') + '</div>' + (coverImgs.length > 1 ? '<button class="carousel-btn prev" onclick="event.stopPropagation();carouselMove(this,\'prev\')"><i class="fa-solid fa-chevron-left"></i></button><button class="carousel-btn next" onclick="event.stopPropagation();carouselMove(this,\'next\')"><i class="fa-solid fa-chevron-right"></i></button><div class="carousel-dots">' + coverImgs.map(function(_,j) { return '<button class="carousel-dot' + (j===0?' active':'') + '" onclick="event.stopPropagation();carouselGo(this,'+j+')"></button>'; }).join('') + '</div>' : '') : '<img src="' + defaultImg() + '" alt="" class="w-full h-full object-cover">') +
-            '<span class="prop-badge ' + info.badge + '">' + t(info.badgeKey) + '</span></div>' +
+            (coverImgs.length > 0 ? '<div class="carousel-track" data-index="0">' + coverImgs.map(function(u) { return '<img src="' + esc(u) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">'; }).join('') + '</div>' + (coverImgs.length > 1 ? '<button class="carousel-btn prev" onclick="event.stopPropagation();carouselMove(this,\'prev\')"><i class="fa-solid fa-chevron-left"></i></button><button class="carousel-btn next" onclick="event.stopPropagation();carouselMove(this,\'next\')"><i class="fa-solid fa-chevron-right"></i></button><div class="carousel-dots">' + coverImgs.map(function(_,j) { return '<button class="carousel-dot' + (j===0?' active':'') + '" onclick="event.stopPropagation();carouselGo(this,'+j+')"></button>'; }).join('') + '</div>' : '') : '<img src="' + defaultImg + '" alt="" class="w-full h-full object-cover">') +
+            '<span class="prop-badge ' + info.badge + '">' + info.badgeText + '</span></div>' +
             '<div class="p-5" style="min-height:250px;"><div><div class="flex items-start justify-between gap-2 mb-2">' +
             '<h3 class="font-display font-bold text-lg text-stone-900 leading-tight flex-1 cursor-pointer hover:text-amber-800" onclick="viewDetail(\'' + p.id + '\')">' + esc(p.name) + '</h3>' +
             '<div class="flex gap-1 flex-shrink-0 admin-only"><button onclick="editProperty(\'' + p.id + '\')" class="btn-icon" style="width:32px;height:32px;font-size:0.75rem;" title="Editar"><i class="fa-solid fa-pen"></i></button><button onclick="requestDelete(\'' + p.id + '\')" class="btn-icon danger" style="width:32px;height:32px;font-size:0.75rem;" title="Eliminar"><i class="fa-solid fa-trash"></i></button></div></div>' +
-            '<p class="text-xs mb-3 flex items-center gap-1.5" style="color:var(--text-muted);"><i class="fa-solid fa-location-dot" style="color:var(--accent);"></i>' + [p.building, p.floor ? t('floor') + ' '+p.floor : '', aptNum(p.apt) ? t('depto') + ' '+aptNum(p.apt) : ''].filter(Boolean).join(' \u00b7 ') + '</p>' +
-            (p.price ? '<div class="flex items-baseline gap-1 mb-4">' + (p.promoActive && p.promoPrice ? '<span class="font-display font-bold text-2xl" style="color:var(--accent);">' + currencySymbol + Number(p.promoPrice).toLocaleString('es') + '</span><span class="text-xs line-through font-semibold" style="color:var(--text-muted);">' + currencySymbol + Number(p.price).toLocaleString('es') + '</span>' : '<span class="font-display font-bold text-2xl" style="color:var(--accent);">' + currencySymbol + Number(p.price).toLocaleString('es') + '</span>') + '<span class="text-xs font-semibold uppercase tracking-wider" style="color:var(--text-muted);">' + priceLabel + '</span></div>' : '<div class="mb-4"><span class="text-xs font-semibold uppercase tracking-wider" style="color:var(--text-muted);">' + t('consultPriceShort') + '</span></div>') +
+            '<p class="text-xs mb-3 flex items-center gap-1.5" style="color:var(--text-muted);"><i class="fa-solid fa-location-dot" style="color:var(--accent);"></i>' + [p.building, p.floor ? 'Piso '+p.floor : '', aptNum(p.apt) ? 'Depto '+aptNum(p.apt) : ''].filter(Boolean).join(' \u00b7 ') + '</p>' +
+            (p.price ? '<div class="flex items-baseline gap-1 mb-4">' + (p.promoActive && p.promoPrice ? '<span class="font-display font-bold text-2xl" style="color:var(--accent);">' + currencySymbol + Number(p.promoPrice).toLocaleString('es') + '</span><span class="text-xs line-through font-semibold" style="color:var(--text-muted);">' + currencySymbol + Number(p.price).toLocaleString('es') + '</span>' : '<span class="font-display font-bold text-2xl" style="color:var(--accent);">' + currencySymbol + Number(p.price).toLocaleString('es') + '</span>') + '<span class="text-xs font-semibold uppercase tracking-wider" style="color:var(--text-muted);">' + priceLabel + '</span></div>' : '<div class="mb-4"><span class="text-xs font-semibold uppercase tracking-wider" style="color:var(--text-muted);">Consultar precio</span></div>') +
             '<div class="flex gap-4 mb-4 text-xs font-medium text-stone-600">' + (p.beds ? '<span><i class="fa-solid fa-bed mr-1 text-amber-800"></i>' + p.beds + ' Hab.</span>' : '') + (p.baths ? '<span><i class="fa-solid fa-bath mr-1 text-amber-800"></i>' + p.baths + ' Ba\u00f1os</span>' : '') + (p.guests ? '<span><i class="fa-solid fa-user-group mr-1 text-amber-800"></i>' + p.guests + ' Hu\u00e9spedes</span>' : '') + (p.parking ? '<span><i class="fa-solid fa-car mr-1 text-amber-800"></i>' + p.parking + '</span>' : '') + '</div>' +
-            (amenities.length > 0 ? '<div class="flex flex-wrap gap-1 mb-4">' + amenities.map(function(a) { return '<span class="text-[10px] px-2 py-1 rounded bg-stone-100 font-medium text-stone-600">' + esc(a.trim()) + '</span>'; }).join('') + (hasMore ? '<span class="text-[10px] px-2 py-1 rounded bg-amber-50 font-bold text-amber-800">' + t('more') + '</span>' : '') + '</div>' : '') + '</div>' +
-'<div class="flex gap-2 pt-3 border-t" style="border-color:var(--border);"><button onclick="viewDetail(\'' + p.id + '\')" class="btn-sm flex-1 bg-stone-100 hover:bg-stone-200 text-stone-800"><i class="fa-solid fa-eye mr-1.5"></i>' + t('viewBtn') + '</button>' +
-'<button onclick="showGuide(\'' + p.id + '\')" class="btn-sm flex-1 bg-amber-50 hover:bg-amber-100 text-amber-800"><i class="fa-solid fa-book-open mr-1.5"></i>' + t('guideBtn') + '</button>' +
+            (amenities.length > 0 ? '<div class="flex flex-wrap gap-1 mb-4">' + amenities.map(function(a) { return '<span class="text-[10px] px-2 py-1 rounded bg-stone-100 font-medium text-stone-600">' + esc(a.trim()) + '</span>'; }).join('') + (hasMore ? '<span class="text-[10px] px-2 py-1 rounded bg-amber-50 font-bold text-amber-800">+ M\u00e1s</span>' : '') + '</div>' : '') + '</div>' +
+            '<div class="flex gap-2 pt-3 border-t" style="border-color:var(--border);"><button onclick="viewDetail(\'' + p.id + '\')" class="btn-sm flex-1 bg-stone-100 hover:bg-stone-200 text-stone-800"><i class="fa-solid fa-eye mr-1.5"></i>Ver</button>' +
+            '<button onclick="showGuide(\'' + p.id + '\')" class="btn-sm flex-1 bg-amber-50 hover:bg-amber-100 text-amber-800"><i class="fa-solid fa-book-open mr-1.5"></i>Gu\u00eda</button>' +
             '</div></div></div>';
     }).join('');
 }
@@ -786,26 +643,26 @@ function viewDetail(id) {
     var ci = Math.min(p.coverIndex || 0, imgs.length - 1);
     if (ci > 0) imgs = imgs.slice(ci).concat(imgs.slice(0, ci));
     var currencySymbol = p.currency === 'USD' ? 'US$' : p.currency === 'EUR' ? '\u20ac' : '$';
-    var priceLabel = p.type === 'fija' ? t('perMonth') : p.type === 'corta' ? t('perNight') : '';
+    var priceLabel = p.type === 'fija' ? '/mes' : p.type === 'corta' ? '/noche' : '';
     var amenities = (p.amenities||'').split('\n').filter(function(a) { return a.trim(); });
     var rules = (p.rules||'').split('\n').filter(function(r) { return r.trim(); });
-    var defaultImg = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500"><rect fill="#EAE3D8" width="800" height="500"/><text x="400" y="250" text-anchor="middle" fill="#9A6A38" font-size="20" font-family="sans-serif">' + t('noPhoto') + '</text></svg>');
+    var defaultImg = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%22500%22%3E%3Crect fill=%22%23EAE3D8%22 width=%22800%22 height=%22500%22/%3E%3Ctext x=%22400%22 y=%22250%22 text-anchor=%22middle%22 fill=%22%239A6A38%22 font-size=%2220%22 font-family=%22sans-serif%22%3ESin foto%3C/text%3E%3C/svg%3E';
     var info = tabInfo[p.type];
     document.getElementById('detail-content').innerHTML =
         '<div class="relative overflow-hidden aspect-video bg-stone-200">' +
         '<div class="carousel-track" data-index="0" id="detail-carousel-track" style="height:100%;">' +
         (imgs.length > 0 ? imgs.map(function(u) { return '<img src="' + esc(u) + '" alt="" class="w-full h-full object-cover" onerror="this.src=\'' + defaultImg + '\'">'; }).join('') : '<img src="' + defaultImg + '" alt="" class="w-full h-full object-cover">') + '</div>' +
         (imgs.length > 1 ? '<button class="carousel-btn prev" onclick="detailCarouselMove(-1)" style="opacity:1;"><i class="fa-solid fa-chevron-left"></i></button><button class="carousel-btn next" onclick="detailCarouselMove(1)" style="opacity:1;"><i class="fa-solid fa-chevron-right"></i></button>' : '') +
-        '<span class="prop-badge ' + info.badge + '">' + t(info.badgeKey) + '</span></div>' +
+        '<span class="prop-badge ' + info.badge + '">' + info.badgeText + '</span></div>' +
         '<div class="p-6 space-y-6"><div><div class="flex items-start justify-between gap-3 mb-1">' +
         '<h2 class="font-display text-2xl sm:text-3xl font-extrabold text-stone-900">' + esc(p.name) + '</h2>' +
         '<div class="flex gap-1 flex-shrink-0 admin-only"><button onclick="editProperty(\'' + p.id + '\');closeModal(\'modal-detail\');" class="btn-icon" style="width:34px;height:34px;" title="Editar"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="closeModal(\'modal-detail\');requestDelete(\'' + p.id + '\');" class="btn-icon danger" style="width:34px;height:34px;" title="Eliminar"><i class="fa-solid fa-trash text-xs"></i></button></div></div>' +
-        '<p class="text-sm text-stone-500"><i class="fa-solid fa-location-dot mr-1.5" style="color:var(--accent);"></i>' + [p.building, p.floor ? t('floor') + ' '+p.floor : '', aptNum(p.apt) ? t('depto') + ' '+aptNum(p.apt) : ''].filter(Boolean).join(' \u00b7 ') + '</p></div>' +
-        (p.price ? '<div class="flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl" style="background:var(--bg-alt);"><div class="flex items-baseline gap-1">' + (p.promoActive && p.promoPrice ? '<div><span class="font-display font-bold text-3xl text-stone-900">' + currencySymbol + Number(p.promoPrice).toLocaleString('es') + '</span><span class="text-xs font-bold uppercase text-stone-500 ml-1">' + priceLabel + '</span></div><div><span class="text-sm line-through text-stone-400">' + currencySymbol + Number(p.price).toLocaleString('es') + '</span></div></div>' : '<span class="font-display font-bold text-3xl text-stone-900">' + currencySymbol + Number(p.price).toLocaleString('es') + '</span><span class="text-xs font-bold uppercase text-stone-500">' + priceLabel + '</span></div>') + '<div class="flex gap-4 text-sm font-semibold text-stone-700">' + (p.beds ? '<span><i class="fa-solid fa-bed mr-1 text-amber-800"></i>' + p.beds + ' Hab.</span>' : '') + (p.baths ? '<span><i class="fa-solid fa-bath mr-1 text-amber-800"></i>' + p.baths + ' Ba\u00f1os</span>' : '') + (p.guests ? '<span><i class="fa-solid fa-user-group mr-1 text-amber-800"></i>' + p.guests + ' Hu\u00e9spedes</span>' : '') + (p.parking ? '<span><i class="fa-solid fa-car mr-1 text-amber-800"></i>' + p.parking + '</span>' : '') + '</div></div>' : '<div class="p-4 rounded-xl text-sm font-semibold text-stone-600" style="background:var(--bg-alt);">' + t('consultPrice') + '</div>') +
-        (p.description ? '<div><h4 class="font-display font-bold text-sm uppercase tracking-wider mb-2 text-stone-400">' + t('detailDesc') + '</h4><p class="text-sm leading-relaxed text-stone-600">' + esc(p.description) + '</p></div>' : '') +
-        (amenities.length > 0 ? '<div><h4 class="font-display font-bold text-sm uppercase tracking-wider mb-2 text-stone-400">' + t('detailAmen') + '</h4><div class="flex flex-wrap gap-2">' + amenities.map(function(a) { return '<span class="text-xs px-3 py-1.5 rounded-full font-medium bg-stone-100 text-stone-700 border border-stone-200/50"><i class="fa-solid fa-circle-check mr-1.5 text-emerald-700"></i>' + esc(a.trim()) + '</span>'; }).join('') + '</div></div>' : '') +
-        (p.notes ? '<div class="rounded-xl p-4 bg-amber-50 border border-amber-200/50"><h4 class="font-display font-bold text-sm text-amber-900 mb-1 flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> ' + t('detailNotes') + '</h4><p class="text-xs text-amber-800 leading-relaxed">' + esc(p.notes) + '</p></div>' : '') +
-        '<div class="flex gap-3 pt-4"><a href="https://wa.me/' + (settings.whatsapp||'593991234567').replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent('Hola, quiero ' + (p.type === 'corta' ? 'reservar' : p.type === 'venta' ? 'comprar' : 'agendar cita de') + ': ' + p.name + ' (' + (p.building||'') + ' ' + (p.floor ? 'Piso '+p.floor : '') + (aptNum(p.apt) ? ' Depto '+aptNum(p.apt) : '') + ')') + '" target="_blank" class="btn-primary flex-1 text-sm"><i class="fa-solid ' + (p.type === 'corta' ? 'fa-calendar-check' : p.type === 'venta' ? 'fa-handshake' : 'fa-calendar-alt') + ' mr-2"></i>' + (p.type === 'corta' ? t('reservar') : p.type === 'venta' ? t('comprar') : t('agendar')) + '</a><a href="https://wa.me/' + (settings.whatsapp||'593991234567').replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent('Hola, me interesa: ' + p.name + ' (' + (p.building||'') + ' ' + (p.floor ? 'Piso '+p.floor : '') + (aptNum(p.apt) ? ' Depto '+aptNum(p.apt) : '') + ')') + '" target="_blank" class="btn-secondary text-sm"><i class="fa-regular fa-star mr-2"></i>' + t('meInteresa') + '</a><button onclick="closeModal(\'modal-detail\');showGuide(\'' + p.id + '\')" class="btn-sm bg-amber-50 hover:bg-amber-100 text-amber-800"><i class="fa-solid fa-book-open mr-1.5"></i>' + t('guideBtn2') + '</button></div>' +
+        '<p class="text-sm text-stone-500"><i class="fa-solid fa-location-dot mr-1.5" style="color:var(--accent);"></i>' + [p.building, p.floor ? 'Piso '+p.floor : '', aptNum(p.apt) ? 'Depto '+aptNum(p.apt) : ''].filter(Boolean).join(' \u00b7 ') + '</p></div>' +
+        (p.price ? '<div class="flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl" style="background:var(--bg-alt);"><div class="flex items-baseline gap-1">' + (p.promoActive && p.promoPrice ? '<div><span class="font-display font-bold text-3xl text-stone-900">' + currencySymbol + Number(p.promoPrice).toLocaleString('es') + '</span><span class="text-xs font-bold uppercase text-stone-500 ml-1">' + priceLabel + '</span></div><div><span class="text-sm line-through text-stone-400">' + currencySymbol + Number(p.price).toLocaleString('es') + '</span></div></div>' : '<span class="font-display font-bold text-3xl text-stone-900">' + currencySymbol + Number(p.price).toLocaleString('es') + '</span><span class="text-xs font-bold uppercase text-stone-500">' + priceLabel + '</span></div>') + '<div class="flex gap-4 text-sm font-semibold text-stone-700">' + (p.beds ? '<span><i class="fa-solid fa-bed mr-1 text-amber-800"></i>' + p.beds + ' Hab.</span>' : '') + (p.baths ? '<span><i class="fa-solid fa-bath mr-1 text-amber-800"></i>' + p.baths + ' Ba\u00f1os</span>' : '') + (p.guests ? '<span><i class="fa-solid fa-user-group mr-1 text-amber-800"></i>' + p.guests + ' Hu\u00e9spedes</span>' : '') + (p.parking ? '<span><i class="fa-solid fa-car mr-1 text-amber-800"></i>' + p.parking + '</span>' : '') + '</div></div>' : '<div class="p-4 rounded-xl text-sm font-semibold text-stone-600" style="background:var(--bg-alt);">Consultar precio — cont\u00e1ctanos por WhatsApp</div>') +
+        (p.description ? '<div><h4 class="font-display font-bold text-sm uppercase tracking-wider mb-2 text-stone-400">Descripci\u00f3n</h4><p class="text-sm leading-relaxed text-stone-600">' + esc(p.description) + '</p></div>' : '') +
+        (amenities.length > 0 ? '<div><h4 class="font-display font-bold text-sm uppercase tracking-wider mb-2 text-stone-400">Amenities</h4><div class="flex flex-wrap gap-2">' + amenities.map(function(a) { return '<span class="text-xs px-3 py-1.5 rounded-full font-medium bg-stone-100 text-stone-700 border border-stone-200/50"><i class="fa-solid fa-circle-check mr-1.5 text-emerald-700"></i>' + esc(a.trim()) + '</span>'; }).join('') + '</div></div>' : '') +
+        (p.notes ? '<div class="rounded-xl p-4 bg-amber-50 border border-amber-200/50"><h4 class="font-display font-bold text-sm text-amber-900 mb-1 flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> Notas</h4><p class="text-xs text-amber-800 leading-relaxed">' + esc(p.notes) + '</p></div>' : '') +
+        '<div class="flex gap-3 pt-4"><a href="https://wa.me/' + (settings.whatsapp||'593991234567').replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent('Hola, quiero ' + (p.type === 'corta' ? 'reservar' : p.type === 'venta' ? 'comprar' : 'agendar cita de') + ': ' + p.name + ' (' + (p.building||'') + ' ' + (p.floor ? 'Piso '+p.floor : '') + (aptNum(p.apt) ? ' Depto '+aptNum(p.apt) : '') + ')') + '" target="_blank" class="btn-primary flex-1 text-sm"><i class="fa-solid ' + (p.type === 'corta' ? 'fa-calendar-check' : p.type === 'venta' ? 'fa-handshake' : 'fa-calendar-alt') + ' mr-2"></i>' + (p.type === 'corta' ? 'Reservar' : p.type === 'venta' ? 'Comprar' : 'Agendar cita') + '</a><a href="https://wa.me/' + (settings.whatsapp||'593991234567').replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent('Hola, me interesa: ' + p.name + ' (' + (p.building||'') + ' ' + (p.floor ? 'Piso '+p.floor : '') + (aptNum(p.apt) ? ' Depto '+aptNum(p.apt) : '') + ')') + '" target="_blank" class="btn-secondary text-sm"><i class="fa-regular fa-star mr-2"></i>Me interesa</a><button onclick="closeModal(\'modal-detail\');showGuide(\'' + p.id + '\')" class="btn-sm bg-amber-50 hover:bg-amber-100 text-amber-800"><i class="fa-solid fa-book-open mr-1.5"></i>Gu\u00eda</button></div>' +
         '</div>';
     openModal('modal-detail');
 }
@@ -822,7 +679,7 @@ function detailCarouselMove(dir) {
 function showGuide(id) {
     var p = properties.find(function(pr) { return pr.id === id; });
     if (!p) return;
-    var location = [p.building, p.floor ? t('floor')+' '+p.floor : '', p.apt ? t('depto')+' '+p.apt : ''].filter(Boolean).join(', ');
+    var location = [p.building, p.floor ? 'Piso '+p.floor : '', p.apt ? 'Depto '+p.apt : ''].filter(Boolean).join(', ');
     var amenities = (p.amenities||'').split('\n').map(function(a) { return a.trim(); }).filter(Boolean);
     var rules = (p.rules||'').split('\n').map(function(r) { return r.trim(); }).filter(Boolean);
     var notes = (p.notes||'').split('\n').map(function(n) { return n.trim(); }).filter(Boolean);
@@ -831,16 +688,16 @@ function showGuide(id) {
         '<div><h2 class="font-display text-2xl sm:text-3xl font-extrabold text-stone-900">' + esc(p.name) + '</h2>' +
         (location ? '<p class="text-sm text-stone-500 mt-1"><i class="fa-solid fa-location-dot mr-1.5" style="color:var(--accent);"></i>' + esc(location) + '</p>' : '') +
         '</div>' +
-        '<button onclick="closeModal(\'modal-guide\')" class="btn-icon flex-shrink-0" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>' +
+        '<button onclick="closeModal(\'modal-guide\')" class="btn-icon flex-shrink-0" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button></div>' +
         (p.welcome ? '<div class="p-5 rounded-xl mb-6" style="background:var(--bg-alt);"><p class="text-sm leading-relaxed text-stone-700"><i class="fa-solid fa-quote-left mr-2" style="color:var(--accent);"></i>' + esc(p.welcome) + '</p></div>' : '') +
         '<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">' +
-        (p.checkin ? '<div class="p-4 rounded-xl text-center" style="background:var(--bg-alt);"><div class="text-xl mb-1" style="color:var(--accent);"><i class="fa-solid fa-right-to-bracket"></i></div><p class="text-xs font-semibold uppercase tracking-wide text-stone-500">' + t('gCheckin') + '</p><p class="font-bold text-stone-900">' + esc(p.checkin) + '</p></div>' : '') +
-        (p.checkout ? '<div class="p-4 rounded-xl text-center" style="background:var(--bg-alt);"><div class="text-xl mb-1" style="color:var(--accent);"><i class="fa-solid fa-right-from-bracket"></i></div><p class="text-xs font-semibold uppercase tracking-wide text-stone-500">' + t('gCheckout') + '</p><p class="font-bold text-stone-900">' + esc(p.checkout) + '</p></div>' : '') +
-        (p.parking ? '<div class="p-4 rounded-xl text-center" style="background:var(--bg-alt);"><div class="text-xl mb-1" style="color:var(--accent);"><i class="fa-solid fa-car"></i></div><p class="text-xs font-semibold uppercase tracking-wide text-stone-500">' + t('gParking') + '</p><p class="font-bold text-stone-900">' + esc(p.parking) + '</p></div>' : '') +
-        (p.floor ? '<div class="p-4 rounded-xl text-center" style="background:var(--bg-alt);"><div class="text-xl mb-1" style="color:var(--accent);"><i class="fa-solid fa-layer-group"></i></div><p class="text-xs font-semibold uppercase tracking-wide text-stone-500">' + t('gFloor') + '</p><p class="font-bold text-stone-900">' + esc(p.floor) + '</p></div>' : '') +
+        (p.checkin ? '<div class="p-4 rounded-xl text-center" style="background:var(--bg-alt);"><div class="text-xl mb-1" style="color:var(--accent);"><i class="fa-solid fa-right-to-bracket"></i></div><p class="text-xs font-semibold uppercase tracking-wide text-stone-500">Check-in</p><p class="font-bold text-stone-900">' + esc(p.checkin) + '</p></div>' : '') +
+        (p.checkout ? '<div class="p-4 rounded-xl text-center" style="background:var(--bg-alt);"><div class="text-xl mb-1" style="color:var(--accent);"><i class="fa-solid fa-right-from-bracket"></i></div><p class="text-xs font-semibold uppercase tracking-wide text-stone-500">Check-out</p><p class="font-bold text-stone-900">' + esc(p.checkout) + '</p></div>' : '') +
+        (p.parking ? '<div class="p-4 rounded-xl text-center" style="background:var(--bg-alt);"><div class="text-xl mb-1" style="color:var(--accent);"><i class="fa-solid fa-car"></i></div><p class="text-xs font-semibold uppercase tracking-wide text-stone-500">Parqueadero</p><p class="font-bold text-stone-900">' + esc(p.parking) + '</p></div>' : '') +
+        (p.floor ? '<div class="p-4 rounded-xl text-center" style="background:var(--bg-alt);"><div class="text-xl mb-1" style="color:var(--accent);"><i class="fa-solid fa-layer-group"></i></div><p class="text-xs font-semibold uppercase tracking-wide text-stone-500">Piso</p><p class="font-bold text-stone-900">' + esc(p.floor) + '</p></div>' : '') +
         '</div>' +
-        (p.wifiName || p.wifiPw ? '<div class="p-5 rounded-xl mb-6" style="background:var(--bg-alt);border:1.5px solid var(--border);"><h3 class="font-display font-bold text-sm uppercase tracking-wider mb-3 text-stone-500"><i class="fa-solid fa-wifi mr-2" style="color:var(--accent);"></i>' + t('gWifi') + '</h3><div class="space-y-2"><div class="flex items-center gap-3"><span class="text-sm font-semibold text-stone-600 min-w-[90px]">' + t('gNet') + '</span><code class="text-sm font-mono bg-white px-3 py-1.5 rounded-lg border text-stone-900" style="border-color:var(--border);">' + esc(p.wifiName||'') + '</code></div>' + (p.wifiPw ? '<div class="flex items-center gap-3"><span class="text-sm font-semibold text-stone-600 min-w-[90px]">' + t('gPw') + '</span><code class="text-sm font-mono bg-white px-3 py-1.5 rounded-lg border text-stone-900" style="border-color:var(--border);">' + esc(p.wifiPw) + '</code></div>' : '') + '</div></div>' : '') +
-        (rules.length > 0 ? '<div class="mb-6"><h3 class="font-display font-bold text-sm uppercase tracking-wider mb-3 text-stone-500"><i class="fa-solid fa-list-check mr-2" style="color:var(--accent);"></i>' + t('gRules') + '</h3><div class="space-y-2">' + rules.map(function(rule) {
+        (p.wifiName || p.wifiPw ? '<div class="p-5 rounded-xl mb-6" style="background:var(--bg-alt);border:1.5px solid var(--border);"><h3 class="font-display font-bold text-sm uppercase tracking-wider mb-3 text-stone-500"><i class="fa-solid fa-wifi mr-2" style="color:var(--accent);"></i>WiFi</h3><div class="space-y-2"><div class="flex items-center gap-3"><span class="text-sm font-semibold text-stone-600 min-w-[90px]">Red:</span><code class="text-sm font-mono bg-white px-3 py-1.5 rounded-lg border text-stone-900" style="border-color:var(--border);">' + esc(p.wifiName||'') + '</code></div>' + (p.wifiPw ? '<div class="flex items-center gap-3"><span class="text-sm font-semibold text-stone-600 min-w-[90px]">Contrase\u00f1a:</span><code class="text-sm font-mono bg-white px-3 py-1.5 rounded-lg border text-stone-900" style="border-color:var(--border);">' + esc(p.wifiPw) + '</code></div>' : '') + '</div></div>' : '') +
+        (rules.length > 0 ? '<div class="mb-6"><h3 class="font-display font-bold text-sm uppercase tracking-wider mb-3 text-stone-500"><i class="fa-solid fa-list-check mr-2" style="color:var(--accent);"></i>Reglas</h3><div class="space-y-2">' + rules.map(function(rule) {
             var icon = 'fa-solid fa-circle';
             if (/fumar|vape|cigarrillo/i.test(rule)) icon = 'fa-solid fa-smoking';
             else if (/bebidas?|alcohol|alcoh[oó]lica/i.test(rule)) icon = 'fa-solid fa-wine-bottle';
@@ -858,7 +715,7 @@ function showGuide(id) {
             else if (/prohibido|no\b/i.test(rule)) icon = 'fa-solid fa-ban';
             return '<div class="flex items-start gap-3 p-3 rounded-lg" style="background:var(--bg-alt);"><i class="' + icon + ' mt-0.5" style="color:var(--accent);font-size:0.8rem;"></i><span class="text-sm text-stone-700">' + esc(rule) + '</span></div>';
         }).join('') + '</div></div>' : '') +
-        (amenities.length > 0 ? '<div class="mb-6"><h3 class="font-display font-bold text-sm uppercase tracking-wider mb-3 text-stone-500"><i class="fa-solid fa-star mr-2" style="color:var(--accent);"></i>' + t('gAmen') + '</h3><div class="flex flex-wrap gap-2">' + amenities.map(function(a) {
+        (amenities.length > 0 ? '<div class="mb-6"><h3 class="font-display font-bold text-sm uppercase tracking-wider mb-3 text-stone-500"><i class="fa-solid fa-star mr-2" style="color:var(--accent);"></i>Servicios y comodidades</h3><div class="flex flex-wrap gap-2">' + amenities.map(function(a) {
             var icon = 'fa-solid fa-circle-check';
             if (/wifi/i.test(a)) icon = 'fa-solid fa-wifi';
             else if (/tv|televisi[oó]n|netflix/i.test(a)) icon = 'fa-solid fa-tv';
@@ -880,10 +737,10 @@ function showGuide(id) {
             else if (/parrilla|bbq|barbacoa/i.test(a)) icon = 'fa-solid fa-fire';
             return '<span class="text-xs px-3 py-1.5 rounded-full font-medium border" style="background:var(--bg-alt);border-color:var(--border);color:var(--text);"><i class="' + icon + ' mr-1.5" style="color:var(--accent);"></i>' + esc(a.trim()) + '</span>';
         }).join('') + '</div></div>' : '') +
-        (notes.length > 0 ? '<div class="mb-6"><h3 class="font-display font-bold text-sm uppercase tracking-wider mb-3 text-stone-500"><i class="fa-solid fa-circle-info mr-2" style="color:var(--accent);"></i>' + t('gNotes') + '</h3><div class="space-y-2">' + notes.map(function(n) { return '<div class="flex items-start gap-3 p-3 rounded-lg" style="background:var(--bg-alt);"><i class="fa-solid fa-pen mt-0.5" style="color:var(--accent);font-size:0.8rem;"></i><span class="text-sm text-stone-700">' + esc(n.trim()) + '</span></div>'; }).join('') + '</div></div>' : '') +
-        '<div class="pt-4 border-t text-center" style="border-color:var(--border);"><p class="text-xs text-stone-400">' + t('shareGuide') + '</p><div class="flex justify-center gap-3 mt-3">' +
-        '<button onclick="copyGuideLink(\'' + id + '\')" class="btn-sm bg-stone-100 hover:bg-stone-200 text-stone-700"><i class="fa-solid fa-link mr-1.5"></i>' + t('copyLink') + '</button>' +
-        '<a href="https://wa.me/?text=' + encodeURIComponent('Gu\u00eda de ' + p.name + ': ' + window.location.href.split('?')[0] + '?guide=' + p.id) + '" target="_blank" class="btn-sm" style="background:#25D366;color:white;"><i class="fa-brands fa-whatsapp mr-1.5"></i>' + t('share') + '</a>' +
+        (notes.length > 0 ? '<div class="mb-6"><h3 class="font-display font-bold text-sm uppercase tracking-wider mb-3 text-stone-500"><i class="fa-solid fa-circle-info mr-2" style="color:var(--accent);"></i>Notas adicionales</h3><div class="space-y-2">' + notes.map(function(n) { return '<div class="flex items-start gap-3 p-3 rounded-lg" style="background:var(--bg-alt);"><i class="fa-solid fa-pen mt-0.5" style="color:var(--accent);font-size:0.8rem;"></i><span class="text-sm text-stone-700">' + esc(n.trim()) + '</span></div>'; }).join('') + '</div></div>' : '') +
+        '<div class="pt-4 border-t text-center" style="border-color:var(--border);"><p class="text-xs text-stone-400">Comparte esta gu\u00eda con tus hu\u00e9spedes</p><div class="flex justify-center gap-3 mt-3">' +
+        '<button onclick="copyGuideLink(\'' + id + '\')" class="btn-sm bg-stone-100 hover:bg-stone-200 text-stone-700"><i class="fa-solid fa-link mr-1.5"></i>Copiar enlace</button>' +
+        '<a href="https://wa.me/?text=' + encodeURIComponent('Gu\u00eda de ' + p.name + ': ' + window.location.href.split('?')[0] + '?guide=' + p.id) + '" target="_blank" class="btn-sm" style="background:#25D366;color:white;"><i class="fa-brands fa-whatsapp mr-1.5"></i>Compartir</a>' +
         '</div></div></div>';
     document.getElementById('guide-content').innerHTML = html;
     openModal('modal-guide');
@@ -891,8 +748,8 @@ function showGuide(id) {
 
 function copyGuideLink(id) {
     var url = window.location.href.split('?')[0] + '?guide=' + id;
-    if (navigator.clipboard) { navigator.clipboard.writeText(url).then(function() { showToast(t('linkCopied'), 'success'); }); }
-    else { showToast(t('copyFail'), 'error'); }
+    if (navigator.clipboard) { navigator.clipboard.writeText(url).then(function() { showToast('Enlace copiado', 'success'); }); }
+    else { showToast('No se pudo copiar', 'error'); }
 }
 
 // ====== FORM ======
@@ -991,9 +848,9 @@ function handlePropertySubmit(e) {
     };
     if (id) {
         var idx = properties.findIndex(function(p) { return p.id === id; });
-        if (idx !== -1) { properties[idx] = Object.assign({}, properties[idx], data); showToast(t('propUpdated'), 'success'); }
+        if (idx !== -1) { properties[idx] = Object.assign({}, properties[idx], data); showToast('Propiedad actualizada', 'success'); }
     } else {
-        data.id = genId(); properties.push(data); showToast(t('propCreated'), 'success');
+        data.id = genId(); properties.push(data); showToast('Propiedad creada', 'success');
     }
     saveData(); renderDashboard(); closeModal('modal-form');
     publishToGitHub();
@@ -1002,8 +859,8 @@ function handlePropertySubmit(e) {
 function renderDashboard() {
     setTimeout(startAutoCarousels, 100);
     var info = tabInfo[activeTab];
-    document.getElementById('tab-title').textContent = t(info.titleKey);
-    document.getElementById('tab-subtitle').textContent = t(info.subKey);
+    document.getElementById('tab-title').textContent = info.title;
+    document.getElementById('tab-subtitle').textContent = info.subtitle;
     renderProperties();
 }
 
@@ -1027,7 +884,7 @@ function handleHeroFiles(files) {
             var reader = new FileReader();
             reader.onload = function(e) {
                 var arr = settings.heroImages || [];
-                if (arr.length >= 6) { showToast(t('maxHero'), 'error'); return; }
+                if (arr.length >= 6) { showToast('M\u00e1ximo 6 im\u00e1genes', 'error'); return; }
                 arr.push(e.target.result);
                 settings.heroImages = arr;
                 renderHeroPreviews();
@@ -1109,7 +966,7 @@ function confirmDelete() {
     if (!deletingId) return;
     properties = properties.filter(function(p) { return p.id !== deletingId; });
     deletingId = null; saveData(); renderDashboard(); closeModal('modal-delete');
-    showToast(t('propDeleted'), 'info');
+    showToast('Propiedad eliminada', 'info');
     publishToGitHub();
 }
 
@@ -1146,7 +1003,7 @@ function saveSettings() {
     updateSocialLinks();
     renderHero();
     closeModal('modal-settings');
-    showToast(t('configSaved'), 'success');
+    showToast('Configuraci\u00f3n guardada', 'success');
     if (tokenVal) publishToGitHub();
 }
 
@@ -1157,7 +1014,7 @@ function exportData() {
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a'); a.href = url; a.download = 'UrbanNova_datos.json'; a.click();
     URL.revokeObjectURL(url);
-    showToast(t('dataExported'), 'success');
+    showToast('Datos exportados', 'success');
 }
 
 function importData(e) {
@@ -1172,12 +1029,12 @@ function importData(e) {
                 if (data.settings) settings = Object.assign({}, settings, data.settings);
                 saveData(); saveSettingsData();
                 renderProperties();
-                showToast(t('dataImported') + ' (' + properties.length + ')', 'success');
+                showToast('Datos importados correctamente (' + properties.length + ' propiedades)', 'success');
                 publishToGitHub();
             } else {
-                showToast(t('invalidFile'), 'error');
+                showToast('Archivo inv\u00e1lido', 'error');
             }
-        } catch(err) { showToast(t('importError') + ' ' + err.message, 'error'); }
+        } catch(err) { showToast('Error al importar: ' + err.message, 'error'); }
     };
     reader.readAsText(file);
     e.target.value = '';
@@ -1202,7 +1059,6 @@ function showToast(msg, type) {
 
 // ====== INIT ======
 (function() {
-    applyI18n();
     loadData();
     checkAdminAuth();
     document.getElementById('admin-view').style.display = '';
@@ -1221,4 +1077,3 @@ function showToast(msg, type) {
 </script>
 </body>
 </html>
-
