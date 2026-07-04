@@ -971,11 +971,14 @@ function handlePropertySubmit(e) {
             promoPrice: document.getElementById('form-promo-price').value.trim(),
             notes: document.getElementById('form-notes').value.trim(),
         };
-        if (id) {
-            var idx = properties.findIndex(function(p) { return p.id === id; });
-            if (idx !== -1) { properties[idx] = Object.assign({}, properties[idx], data); showToast('Propiedad actualizada', 'success'); }
+        var idx = id ? properties.findIndex(function(p) { return p.id === id; }) : -1;
+        if (idx !== -1) {
+            properties[idx] = Object.assign({}, properties[idx], data);
+            showToast('Propiedad actualizada', 'success');
         } else {
-            data.id = id; properties.push(data); showToast('Propiedad creada', 'success');
+            data.id = id || genId();
+            properties.push(data);
+            showToast('Propiedad creada', 'success');
         }
         saveData(); renderDashboard(); closeModal('modal-form');
         pendingFileUploads = [];
