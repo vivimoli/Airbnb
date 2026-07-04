@@ -760,7 +760,7 @@ function openPropertyForm(id) {
     uploadedImages = [];
     if (id) {
         var p = properties.find(function(pr) { return pr.id === id; });
-        if (!p) { showToast('Error: propiedad no encontrada (openPropertyForm)', 'error'); return; }
+        if (!p) return;
         document.getElementById('form-title').textContent = 'Editar Propiedad';
         document.getElementById('form-id').value = p.id;
         document.getElementById('form-name').value = p.name;
@@ -780,7 +780,6 @@ function openPropertyForm(id) {
         document.getElementById('form-guests').value = p.guests||'';
         // all images go to preview (paths + data URLs)
         uploadedImages = parseImages(p.images);
-        document.getElementById('form-images').value = '';
         renderImagePreview();
         document.getElementById('form-desc').value = p.description||'';
         document.getElementById('form-amenities').value = p.amenities||'';
@@ -805,12 +804,7 @@ function openPropertyForm(id) {
     openModal('modal-form');
 }
 
-function editProperty(id) {
-    showToast('Editando: ' + id + ' (' + properties.length + ' props)', 'info');
-    var found = properties.find(function(p) { return p.id === id; });
-    if (!found) { showToast('ERROR: propiedad no encontrada: ' + id, 'error'); return; }
-    openPropertyForm(id);
-}
+function editProperty(id) { openPropertyForm(id); }
 
 function onTypeChange() {
     var type = document.querySelector('input[name="form-type"]:checked');
