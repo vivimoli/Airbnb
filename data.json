@@ -53,7 +53,7 @@
       "welcome": "¡Bienvenido al 20F! Disfruta la mejor vista de Quito.",
       "phone": "",
       "email": "",
-      "notes": "Jacuzzi y sauna requieren reserva con 48h (lun-vie). Lunes jacuzzi en mantenimiento.",
+      "notes": "Jacuzzi y sauna requieren reserva con 48h (lun-vie). Lunes jacuzzi en mantenimiento. El uso de gorro para jacuzzi es obligatorio.",
       "carouselAuto": false,
       "coverIndex": 1,
       "parking": "",
@@ -304,9 +304,10 @@
   "settings": {
     "baseURL": "https://vivimoli.github.io/Airbnb/",
     "whatsapp": "",
+    "whatsapp2": "593983352920",
     "tiktok": "",
-    "instagram": "",
     "heroImages": [],
+    "instagram": "",
     "_token": ""
   }
 }
