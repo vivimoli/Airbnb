@@ -514,7 +514,7 @@ function publishToGitHub(done) {
     for (var k in settings) { if (settings.hasOwnProperty(k) && k !== '_token') publishSettings[k] = settings[k]; }
     var payload = { properties: properties, settings: publishSettings };
     var jsonStr = JSON.stringify(payload, null, 2);
-    if (jsonStr.length > 500000) { showToast('Los datos son muy grandes para GitHub (>500KB). Reduce el tama\u00f1o de las fotos.', 'error'); publishBusy = false; if (done) done(false); return; }
+    if (jsonStr.length > 3000000) { showToast('Los datos son muy grandes para GitHub (>3MB). Reduce el tama\u00f1o de las fotos.', 'error'); publishBusy = false; if (done) done(false); return; }
     var encoded = btoa(unescape(encodeURIComponent(jsonStr)));
     var baseUrl = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO;
     var headers = { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' };
@@ -1012,14 +1012,52 @@ function handleHeroFiles(files) {
             reader.onload = function(e) {
                 var arr = settings.heroImages || [];
                 if (arr.length >= 6) { showToast('M\u00e1ximo 6 im\u00e1genes', 'error'); return; }
-                arr.push(e.target.result);
+                var dataUrl = e.target.result;
+                var idx = arr.length;
+                arr.push(dataUrl);
                 settings.heroImages = arr;
                 renderHeroPreviews();
                 renderHero();
+                var token = getGithubToken();
+                if (token) {
+                    resizeImage(f, 1600, 1200, function(compressed) {
+                        uploadHeroImageToRepo(token, compressed, function(path) {
+                            if (path && settings.heroImages && settings.heroImages[idx]) {
+                                settings.heroImages[idx] = path;
+                                renderHero();
+                            }
+                        });
+                    });
+                }
             };
             reader.readAsDataURL(f);
         })(files[i]);
     }
+}
+
+function uploadHeroImageToRepo(token, file, cb) {
+    var name = 'hero_' + Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+    name = name.replace(/\.(png|webp|jpeg)$/i, '.jpg');
+    var path = 'fotos/hero/' + name;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        var base64 = e.target.result.split(',')[1];
+        var url = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + path;
+        fetch(url, { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' } })
+            .then(function(r) { return r.status === 404 ? {} : r.json(); })
+            .then(function(ex) {
+                var body = { message: 'Subir hero ' + name, content: base64, branch: GITHUB_BRANCH };
+                if (ex.sha) body.sha = ex.sha;
+                return fetch(url, {
+                    method: 'PUT',
+                    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github+json' },
+                    body: JSON.stringify(body)
+                });
+            })
+            .then(function(r) { cb(r.ok ? path : null); })
+            .catch(function() { cb(null); });
+    };
+    reader.readAsDataURL(file);
 }
 
 function removeHeroImage(idx) {
